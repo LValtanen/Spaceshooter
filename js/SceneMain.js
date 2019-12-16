@@ -18,6 +18,10 @@ class SceneMain extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
+        this.load.spritesheet("sprBossExplosion", "content/explosion-2.png", {
+            frameWidth: 100,
+            frameHeight: 100
+        });
 
         this.load.image("playerShip", "content/playerShip.png");
 
@@ -79,6 +83,12 @@ class SceneMain extends Phaser.Scene {
             frameRate: 20,
             repeat: 0
         });
+        this.anims.create({
+            key: "sprBossExplosion",
+            frames: this.anims.generateFrameNumbers("sprBossExplosion"),
+            frameRate: 20,
+            repeat: 3
+        });
 
         // play sound effects from the object with this.sfx.laser.play();
         this.sfx = {
@@ -108,6 +118,8 @@ class SceneMain extends Phaser.Scene {
             this.game.config.height * 0.5,
             "playerShip"
         );
+
+        var player = this.player;
 
         var scorePlus = '';
         var scoreStr = 'Score : ';
@@ -139,57 +151,57 @@ class SceneMain extends Phaser.Scene {
         var enemyType = '';
 
         // enemy spawn event
-        // this.time.addEvent({
-        //     // amount of gun ships being spawned at once
-        //     delay: 500,
-        //     callback: function () {
-        //         var enemy = null;
-        //         var randomizer = Phaser.Math.Between(0, 10);
-        //         if (randomizer >= 7) {
-        //             enemy = new EnemyTank(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         else if (randomizer >= 5) {
-        //             if (this.getEnemiesByType("EnergyBall").length < 5) {
-        //                 enemy = new EnergyBall(
-        //                     this,
-        //                     Phaser.Math.Between(0, this.game.config.width),
-        //                     0
-        //                 );
-        //             }
-        //         }
-        //         else if (randomizer >= 4) {
-        //             enemy = new GunShip(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         else if (randomizer >= 1) {
-        //             enemy = new YellowGunShip(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         else {
-        //             enemy = new FastEnemyShip(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         if (enemy !== null) {
-        //             enemy.setScale(Phaser.Math.Between(10, 20) * 0.1);
-        //             this.enemies.add(enemy);
-        //         }
-        //     },
-        //     callbackScope: this,
-        //     loop: true
-        // });
+        this.time.addEvent({
+            // amount of gun ships being spawned at once
+            delay: 500,
+            callback: function () {
+                var enemy = null;
+                var randomizer = Phaser.Math.Between(0, 10);
+                if (randomizer >= 7) {
+                    enemy = new EnemyTank(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                else if (randomizer >= 5) {
+                    if (this.getEnemiesByType("EnergyBall").length < 5) {
+                        enemy = new EnergyBall(
+                            this,
+                            Phaser.Math.Between(0, this.game.config.width),
+                            0
+                        );
+                    }
+                }
+                else if (randomizer >= 4) {
+                    enemy = new GunShip(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                else if (randomizer >= 1) {
+                    enemy = new YellowGunShip(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                else {
+                    enemy = new FastEnemyShip(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                if (enemy !== null) {
+                    enemy.setScale(Phaser.Math.Between(10, 20) * 0.1);
+                    this.enemies.add(enemy);
+                }
+            },
+            callbackScope: this,
+            loop: true
+        });
 
         // BOSS spawn event
         this.time.addEvent({
@@ -263,7 +275,7 @@ class SceneMain extends Phaser.Scene {
                 }
 
                 // stage cleared!
-                if (score >= 10000) {
+                if (score >= 100) {
                     player.onStageCleared();
                 }
 
@@ -281,6 +293,7 @@ class SceneMain extends Phaser.Scene {
                     boss.explode(false);
                     boss.onDestroy();
                     score += 200;
+                    player.onStageCleared();
                 }
                 //  decrease BOSS HP
                 if (bossHp > 0) {
@@ -291,14 +304,16 @@ class SceneMain extends Phaser.Scene {
                 score += 15;
                 scorePlus = enemyType + "   +15";
                 scoreText.text = scoreStr + score + scorePlus;
+                if (score >= 10) {
+                    player.onStageCleared();
+                }
             }
         });
 
         // collider between this.player and this.enemies
         this.physics.add.overlap(this.player, this.enemies, function (player, enemy) {
             if (!player.getData("isDead") &&
-                !enemy.getData("isDead") &&
-                !enemy.getData("type") == "Stage1Boss") {
+                !enemy.getData("isDead")) {
                 player.explode(false);
                 player.onDestroy();
 
@@ -306,7 +321,6 @@ class SceneMain extends Phaser.Scene {
                     hp -= hp;
                     hpText.text = hpStr + hp;
                 }
-
                 enemy.explode(true);
             }
         });
