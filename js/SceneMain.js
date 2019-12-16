@@ -43,6 +43,7 @@ class SceneMain extends Phaser.Scene {
     }
 
     create() {
+        //reset score at game start
         score = 0;
         //create joystick plugin
         this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
