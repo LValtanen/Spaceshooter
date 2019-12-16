@@ -16,7 +16,7 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image("stars2Bg", "content/backgrounds/Stars2.png");
         this.load.image("nebulaMainMenuBg", "content/backgrounds/nebulaMainMenuBg.png");
         this.load.image("nebulaStoryBg", "content/backgrounds/nebulaStoryBg.png");
-        this.load.image("spaceCaptain", "content/spaceCaptain.png");
+        this.load.image("spaceCaptain", "content/spaceCaptainBorders.png");
         this.load.image("sprBtn", "content/buttons/sprbutton.png");
         this.load.image("sprBtnHover", "content/buttons/sprbuttonhover.png");
         this.load.image("sprBtnPressed", "content/buttons/sprbuttonpressed.png");
@@ -33,7 +33,7 @@ class SceneMainMenu extends Phaser.Scene {
         //Create Play button
         this.btnPlay = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.5,
+            this.game.config.height * 0.7,
             "sprBtn"
         );
         this.btnPlay.setInteractive();
@@ -53,7 +53,7 @@ class SceneMainMenu extends Phaser.Scene {
             this.scene.start("SceneMain");
         }, this);
 
-        this.title = this.add.text(this.game.config.width * 0.5, 320, "PLAY", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "PLAY", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
@@ -65,7 +65,7 @@ class SceneMainMenu extends Phaser.Scene {
         //Create Story button
         this.btnStory = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.6,
+            this.game.config.height * 0.8,
             "sprBtn"
         ); 
         this.btnStory.setInteractive();
@@ -84,7 +84,7 @@ class SceneMainMenu extends Phaser.Scene {
             this.btnStory.setTexture("sprBtn");
             this.scene.start("SceneStory");
         }, this);
-        this.title = this.add.text(this.game.config.width * 0.5, 384, "STORY", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.8, "STORY", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
@@ -94,7 +94,7 @@ class SceneMainMenu extends Phaser.Scene {
         this.title.setOrigin(0.5);
 
         //Create game title
-        this.title = this.add.text(this.game.config.width * 0.5, 128, "AVARUUSAMPUJA", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.2, "AVARUUSAMPUJA", {
             fontFamily: 'monospace',
             fontSize: 45,
             fontStyle: 'bold',

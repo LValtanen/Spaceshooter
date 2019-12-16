@@ -54,6 +54,7 @@ class SceneMain extends Phaser.Scene {
         timer = 500;
         launched = true;
         score = 0;
+        bosslaunched = true;
 
         //create joystick plugin
         this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
@@ -69,12 +70,12 @@ class SceneMain extends Phaser.Scene {
         }).on('update', this.dumpJoyStickState, this);
 
         var hp = 3;
-        var hpStr = 'SHIELDS : ';
-        var hpText = this.add.text(this.game.config.width * 0.8, 15, hpStr + hp, {
-            fontSize: 35,
+        var hpStr = 'SHIELDS: ';
+        var hpText = this.add.text(this.game.config.width - 75, 15, hpStr + hp, {
+            fontSize: 45,
             fontStyle: 'fill',
             color: '#ffffff',
-            align: 'center'
+            align: 'right'
         });
 
         var bossHp = 100;
@@ -125,9 +126,9 @@ class SceneMain extends Phaser.Scene {
         var player = this.player;
 
         var scorePlus = '';
-        var scoreStr = 'Score : ';
-        var scoreText = this.add.text(30, 15, scoreStr + score, {
-            fontSize: 35,
+        var scoreStr = 'SCORE: ';
+        var scoreText = this.add.text(20, 15, scoreStr + score, {
+            fontSize: 45,
             fontStyle: 'fill',
             color: '#ffffff',
             align: 'center'
@@ -152,15 +153,18 @@ class SceneMain extends Phaser.Scene {
         var enemyType = '';
 
         // BOSS spawn event
-        this.time.addEvent({
-            delay: 500,
-            callback: function () {
-                var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
-                this.bossShips.add(boss);
-            },
-            callbackScope: this,
-            loop: false
-        });
+        // this.time.addEvent({
+        //     delay: 500,
+        //     callback: function () {
+        //         var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
+        //         console.log(boss.body.y);
+
+
+        //         this.bossShips.add(boss);
+        //     },
+        //     callbackScope: this,
+        //     loop: false
+        // });
 
         // create rotating balls
         // for (var i = 0; i < 60; i++) {
@@ -231,8 +235,9 @@ class SceneMain extends Phaser.Scene {
                 if (bossHp == 0) {
                     boss.explode(false);
                     boss.onDestroy();
-                    score += 200;
-                    player.onStageCleared();
+                    score += 500;
+                    // player.onStageCleared();
+                    bosslaunched = true;
                 }
                 //  decrease BOSS HP
                 if (bossHp > 0) {
@@ -315,6 +320,17 @@ class SceneMain extends Phaser.Scene {
         if (launched === true) {
             this.timerEvent();
             launched = false;
+        }
+
+        //launch boss based on score
+        if (score > 2000 && score < 2499 && bosslaunched === true) {
+            this.bossCreator();
+        }
+        if (score > 4000 && score < 4499 && bosslaunched === true) {
+            this.bossCreator();
+        }
+        if (score > 6000 && score < 6499 && bosslaunched === true) {
+            this.bossCreator();
         }
 
         //update joystick plugin, set player movement
@@ -506,11 +522,10 @@ class SceneMain extends Phaser.Scene {
     //timer event for spawning enemies
     timerEvent() {
         if (timer > 100) {
-            timer -= score / 500;
+            timer -= score / 800;
         } else {
             timer = 100;
         }
-
         console.log(timer);
         this.time.addEvent({
             delay: timer,
@@ -521,5 +536,14 @@ class SceneMain extends Phaser.Scene {
             callbackScope: this,
             loop: false
         });
+    }
+
+    bossCreator() {
+        var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
+        console.log(boss.body.y);
+
+
+        this.bossShips.add(boss);
+        bosslaunched = false;
     }
 }
