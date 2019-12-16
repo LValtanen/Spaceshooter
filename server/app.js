@@ -31,9 +31,18 @@ app.use(cookieParser());
 // require passport auth
 require('./auth/auth');
 
+app.get('/game.html', passport.authenticate('jwt', { session: false }), function (req, res) {
+  res.sendFile(__dirname + '/public/game.html');
+});
+
+app.use(express.static(__dirname + '/public'));
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+
 // main routes
 app.use('/', routes);
-app.use('/', passport.authenticate('jwt', { session : false }), secureRoutes);
+app.use('/', passport.authenticate('jwt', { session: false }), secureRoutes);
 
 // catch all other routes
 app.use((req, res, next) => {
