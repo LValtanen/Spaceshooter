@@ -23,3 +23,7 @@ var config = {
 var game = new Phaser.Game(config);
 
 var score = 0;
+
+var launched = true;
+
+var timer = 500;

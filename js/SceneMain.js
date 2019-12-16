@@ -50,8 +50,11 @@ class SceneMain extends Phaser.Scene {
     }
 
     create() {
-        //reset score at game start
+        //reset values at game start
+        timer = 500;
+        launched = true;
         score = 0;
+
         //create joystick plugin
         this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
             key: "shit",
@@ -111,10 +114,11 @@ class SceneMain extends Phaser.Scene {
             this.backgrounds.push(bg);
         }
 
+        //put player on the map
         this.player = new Player(
             this,
             this.game.config.width * 0.5,
-            this.game.config.height * 0.5,
+            this.game.config.height * 0.8,
             "playerShip"
         );
 
@@ -145,9 +149,9 @@ class SceneMain extends Phaser.Scene {
 
         this.playerLasers = this.add.group();
 
-
         var enemyType = '';
 
+<<<<<<< HEAD
         // enemy spawn event
         this.time.addEvent({
             // amount of gun ships being spawned at once
@@ -201,6 +205,8 @@ class SceneMain extends Phaser.Scene {
             loop: true
         });
 
+=======
+>>>>>>> 040594dfcea1b526071839187d5a77e6010c29e8
         // BOSS spawn event
         this.time.addEvent({
             delay: 500,
@@ -211,7 +217,6 @@ class SceneMain extends Phaser.Scene {
             callbackScope: this,
             loop: false
         });
-
 
         // create rotating balls
         // for (var i = 0; i < 60; i++) {
@@ -361,8 +366,13 @@ class SceneMain extends Phaser.Scene {
             }
         });
     }
-
     update() {
+        //launch enemy
+        if (launched === true) {
+            this.timerEvent();
+            launched = false;
+        }
+
         //update joystick plugin, set player movement
         var cursorKeys = this.joyStick.createCursorKeys();
         var s = '';
@@ -502,5 +512,70 @@ class SceneMain extends Phaser.Scene {
         s += '\n';
         s += ('Force: ' + Math.floor(this.joyStick.force * 100) / 100 + '\n');
         s += ('Angle: ' + Math.floor(this.joyStick.angle * 100) / 100 + '\n');
+    }
+    //create different enemies
+    launchEnemies() {
+        var enemy = null;
+        var randomizer = Phaser.Math.Between(0, 10);
+        if (randomizer >= 7) {
+            enemy = new EnemyTank(
+                this,
+                Phaser.Math.Between(0, this.game.config.width),
+                0
+            );
+        }
+        else if (randomizer >= 5) {
+            if (this.getEnemiesByType("EnergyBall").length < 5) {
+                enemy = new EnergyBall(
+                    this,
+                    Phaser.Math.Between(0, this.game.config.width),
+                    0
+                );
+            }
+        }
+        else if (randomizer >= 4) {
+            enemy = new GunShip(
+                this,
+                Phaser.Math.Between(0, this.game.config.width),
+                0
+            );
+        }
+        else if (randomizer >= 1) {
+            enemy = new YellowGunShip(
+                this,
+                Phaser.Math.Between(0, this.game.config.width),
+                0
+            );
+        }
+        else {
+            enemy = new FastEnemyShip(
+                this,
+                Phaser.Math.Between(0, this.game.config.width),
+                0
+            );
+        }
+        if (enemy !== null) {
+            enemy.setScale(Phaser.Math.Between(10, 20) * 0.1);
+            this.enemies.add(enemy);
+        }
+    }
+    //timer event for spawning enemies
+    timerEvent() {
+        if (timer > 100) {
+            timer -= score / 500;
+        } else {
+            timer = 100;
+        }
+
+        console.log(timer);
+        this.time.addEvent({
+            delay: timer,
+            callback: function () {
+                this.launchEnemies();
+                launched = true;
+            },
+            callbackScope: this,
+            loop: false
+        });
     }
 }
