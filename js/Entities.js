@@ -7,12 +7,18 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.setData("type", type);
         this.setData("isDead", false);
     }
-    
+
     explode(canDestroy) {
         if (!this.getData("isDead")) {
             // set texture to explosion image, then play animation
-            this.setTexture("sprExplosion");
-            this.play("sprExplosion");
+            if (this.getData("type") == "Stage1Boss") {
+                this.setTexture("sprBossExplosion");
+                this.play("sprBossExplosion");
+            } else {
+                this.setTexture("sprExplosion");
+                this.play("sprExplosion");
+            }
+
             // pick random explosion sound defined in this.sfx in SceneMain
             this.scene.sfx.explosions[Phaser.Math.Between(0, this.scene.sfx.explosions.length - 1)].play();
 
@@ -125,6 +131,16 @@ class EnemyLaser extends Entity {
     }
 }
 
+class BossLaser extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "laserYellow");
+        this.body.velocity.y = 444;
+        this.body.collideWorldBounds = true;
+        this.body.setBounce(1, 1);
+        this.body.setGravityY(50);
+    }
+}
+
 class FastEnemyShip extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "enemyShip2", "FastEnemyShip");
@@ -172,6 +188,7 @@ class EnergyBall extends Entity {
     }
 }
 
+// scrapped enemy group - saved for later development
 // class EnergyBallGroup extends Entity {
 //     constructor(scene, x, y) {
 //         super(scene, x, y, "enemyEnergyGroup", "EnergyBallGroup");
@@ -214,7 +231,7 @@ class YellowGunShip extends Entity {
         this.body.velocity.y = Phaser.Math.Between(50, 100);
         this.body.velocity.x = 200;
         this.body.collideWorldBounds = true;
-        this.body.setBounce(1,1);
+        this.body.setBounce(1, 1);
         this.body.setGravityY(50);
         this.shootTimer = this.scene.time.addEvent({
             delay: 1000,
@@ -256,6 +273,35 @@ class EnemyTank extends Entity {
                 Math.cos(angle) * speed,
                 Math.sin(angle) * speed
             );
+        }
+    }
+}
+
+class Stage1Boss extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "enemyBossShip1", "Stage1Boss");
+        this.body.velocity.y = 100;
+
+        this.shootTimer = this.scene.time.addEvent({
+            delay: 1000,
+            callback: function () {
+                var laser = new BossLaser(
+                    this.scene,
+                    this.x,
+                    this.y
+                );
+                laser.setScale(this.scaleX);
+                this.scene.bossLasers.add(laser);
+            },
+            callbackScope: this,
+            loop: true
+        });
+    }
+    onDestroy() {
+        if (this.shootTimer !== undefined) {
+            if (this.shootTimer) {
+                this.shootTimer.remove(false);
+            }
         }
     }
 }

@@ -18,6 +18,10 @@ class SceneMain extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
+        this.load.spritesheet("sprBossExplosion", "content/explosion-2.png", {
+            frameWidth: 100,
+            frameHeight: 100
+        });
 
         this.load.image("playerShip", "content/playerShip.png");
 
@@ -33,7 +37,10 @@ class SceneMain extends Phaser.Scene {
         this.load.image("enemyEnergy1", "content/enemyEnergy1.png");
         // this.load.image("enemyEnergyGroup", "content/enemyEnergy2.png");
 
+        this.load.image("enemyBossShip1", "content/enemyBossShip1.png");
+
         this.load.image("laserRed", "content/laserRed.png");
+        this.load.image("laserYellow", "content/laserYellow.png");
         this.load.image("laserBlue", "content/laserBlue.png");
 
         this.load.audio("sndExplode1", "content/audio/glitchedtones_Machine Glitch 01.mp3");
@@ -71,11 +78,19 @@ class SceneMain extends Phaser.Scene {
         });
         hpText.setOrigin(0.5);
 
+        var bossHp = 10;
+
         this.anims.create({
             key: "sprExplosion",
             frames: this.anims.generateFrameNumbers("sprExplosion"),
             frameRate: 20,
             repeat: 0
+        });
+        this.anims.create({
+            key: "sprBossExplosion",
+            frames: this.anims.generateFrameNumbers("sprBossExplosion"),
+            frameRate: 20,
+            repeat: 3
         });
 
         // play sound effects from the object with this.sfx.laser.play();
@@ -108,6 +123,8 @@ class SceneMain extends Phaser.Scene {
             "playerShip"
         );
 
+        var player = this.player;
+
         var scorePlus = '';
         var scoreStr = 'Score : ';
         var scoreText = this.add.text(this.game.config.width * 0.25, 15, scoreStr + score, {
@@ -127,10 +144,28 @@ class SceneMain extends Phaser.Scene {
 
         this.enemies = this.add.group();
         this.enemyLasers = this.add.group();
-        this.playerLasers = this.add.group();
         // this.enemyBalls = this.add.group();
 
+        this.bossShips = this.add.group();
+        this.bossLasers = this.add.group();
+
+        this.playerLasers = this.add.group();
+
         var enemyType = '';
+
+        // BOSS spawn event
+        this.time.addEvent({
+            delay: 500,
+            callback: function () {
+                var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
+                console.log(boss.body.y);
+
+
+                this.bossShips.add(boss);
+            },
+            callbackScope: this,
+            loop: false
+        });
 
         // create rotating balls
         // for (var i = 0; i < 60; i++) {
@@ -148,6 +183,7 @@ class SceneMain extends Phaser.Scene {
         //     }
         // });
 
+        // COLLIDERS
         // collider between this.playerLasers and this.enemies
         this.physics.add.collider(this.playerLasers, this.enemies, function (playerLaser, enemy) {
             if (enemy) {
@@ -188,12 +224,38 @@ class SceneMain extends Phaser.Scene {
                 }
 
                 // stage cleared!
-                if (score >= 10000) {
+                if (score >= 100) {
                     player.onStageCleared();
                 }
 
                 enemy.explode(true);
                 playerLaser.destroy();
+
+            }
+        });
+
+        // collider between this.playerLasers and this.bossShips
+        this.physics.add.overlap(this.bossShips, this.playerLasers, function (boss, laser) {
+            if (!boss.getData("isDead") &&
+                !laser.getData("isDead")) {
+                if (bossHp == 0) {
+                    boss.explode(false);
+                    boss.onDestroy();
+                    score += 200;
+                    player.onStageCleared();
+                }
+                //  decrease BOSS HP
+                if (bossHp > 0) {
+                    bossHp -= 1;
+                }
+                laser.destroy();
+                enemyType = "   COMMANDER";
+                score += 15;
+                scorePlus = enemyType + "   +15";
+                scoreText.text = scoreStr + score + scorePlus;
+                if (score >= 10) {
+                    player.onStageCleared();
+                }
             }
         });
 
@@ -203,14 +265,27 @@ class SceneMain extends Phaser.Scene {
                 !enemy.getData("isDead")) {
                 player.explode(false);
                 player.onDestroy();
-                console.log("SCORE:" + score);
 
                 if (hp > 0) {
                     hp -= hp;
                     hpText.text = hpStr + hp;
                 }
-
                 enemy.explode(true);
+            }
+        });
+
+        // collider between this.player and this.bossShips
+        this.physics.add.overlap(this.player, this.bossShips, function (player, boss) {
+            if (!player.getData("isDead") &&
+                !boss.getData("isDead") &&
+                boss.getData("type") == "Stage1Boss") {
+                player.explode(false);
+                player.onDestroy();
+
+                if (hp > 0) {
+                    hp -= hp;
+                    hpText.text = hpStr + hp;
+                }
             }
         });
 
@@ -221,7 +296,23 @@ class SceneMain extends Phaser.Scene {
                 if (hp == 0) {
                     player.explode(false);
                     player.onDestroy();
-                    console.log("SCORE:" + score);
+                }
+                //  decrease HP
+                if (hp > 0) {
+                    hp -= 1;
+                    hpText.text = hpStr + hp;
+                }
+                laser.destroy();
+            }
+        });
+
+        // collider between this.player and this.bossLasers
+        this.physics.add.overlap(this.player, this.bossLasers, function (player, laser) {
+            if (!player.getData("isDead") &&
+                !laser.getData("isDead")) {
+                if (hp == 0) {
+                    player.explode(false);
+                    player.onDestroy();
                 }
                 //  decrease HP
                 if (hp > 0) {
@@ -309,6 +400,18 @@ class SceneMain extends Phaser.Scene {
 
         for (var i = 0; i < this.enemyLasers.getChildren().length; i++) {
             var laser = this.enemyLasers.getChildren()[i];
+            laser.update();
+            if (laser.x < -laser.displayWidth ||
+                laser.x > this.game.config.width + laser.displayWidth ||
+                laser.y < -laser.displayHeight * 4 ||
+                laser.y > this.game.config.height + laser.displayHeight) {
+                if (laser) {
+                    laser.destroy();
+                }
+            }
+        }
+        for (var i = 0; i < this.bossLasers.getChildren().length; i++) {
+            var laser = this.bossLasers.getChildren()[i];
             laser.update();
             if (laser.x < -laser.displayWidth ||
                 laser.x > this.game.config.width + laser.displayWidth ||

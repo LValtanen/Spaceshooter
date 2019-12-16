@@ -14,7 +14,7 @@ class SceneStageCleared extends Phaser.Scene {
 
         var player = new Player(this);
 
-        this.finalScore = this.add.text(this.game.config.width * 0.5, 200, "SCORE:" + player.getData("score"));
+        this.finalScore = this.add.text(this.game.config.width * 0.5, 200, "SCORE:" + score);
         this.finalScore.setOrigin(0.5);
 
         this.sfx = {
