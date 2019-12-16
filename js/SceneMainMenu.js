@@ -14,7 +14,8 @@ class SceneMainMenu extends Phaser.Scene {
         //load game assets
         this.load.image("stars1Bg", "content/backgrounds/Stars1.png");
         this.load.image("stars2Bg", "content/backgrounds/Stars2.png");
-        this.load.image("nebula10Bg", "content/backgrounds/nebula10.png");
+        this.load.image("nebulaMainMenuBg", "content/backgrounds/nebulaMainMenuBg.png");
+        this.load.image("nebulaStoryBg", "content/backgrounds/nebulaStoryBg.png");
         this.load.image("spaceCaptain", "content/spaceCaptain.png");
         this.load.image("sprBtn", "content/buttons/sprbutton.png");
         this.load.image("sprBtnHover", "content/buttons/sprbuttonhover.png");
@@ -81,7 +82,7 @@ class SceneMainMenu extends Phaser.Scene {
         }, this);
         this.btnStory.on("pointerup", function () {
             this.btnStory.setTexture("sprBtn");
-            this.scene.start("SceneIntro");
+            this.scene.start("SceneStory");
         }, this);
         this.title = this.add.text(this.game.config.width * 0.5, 384, "STORY", {
             fontFamily: 'monospace',
@@ -105,7 +106,7 @@ class SceneMainMenu extends Phaser.Scene {
         //Create backgrounds
         this.backgrounds = [];
         for (var i = 0; i < 3; i++) {
-            var keys = ["nebula10Bg", "stars1Bg", "stars2Bg"];
+            var keys = ["nebulaMainMenuBg", "stars1Bg", "stars2Bg"];
             var key = keys[i];
             var bg = new ScrollingBackground(this, key, i+2 * 15);
             this.backgrounds.push(bg);

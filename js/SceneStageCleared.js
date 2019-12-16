@@ -63,7 +63,7 @@ class SceneStageCleared extends Phaser.Scene {
         }, this);
 
         this.backgrounds = [];
-        var bg = new ScrollingBackground(this, "nebula06Bg", 50);
+        var bg = new ScrollingBackground(this, "nebulaStageClearedBg", 50);
         this.backgrounds.push(bg);
     }
     update() {

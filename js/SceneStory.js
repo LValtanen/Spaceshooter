@@ -1,14 +1,7 @@
-class SceneIntro extends Phaser.Scene {
+class SceneStory extends Phaser.Scene {
     constructor() {
-        super({ key: "SceneIntro" });
+        super({ key: "SceneStory" });
     }
-    preload() {
-        //load game assets
-        this.load.image("stars1Bg", "content/backgrounds/Stars1.png");
-        this.load.image("stars2Bg", "content/backgrounds/Stars2.png");
-        this.load.image("nebula10Bg", "content/backgrounds/nebula10.png");
-    }
-
     create() {
         this.load.image("nebula10Bg", "content/backgrounds/nebula10.png");
         //Create title and storytexts
@@ -102,7 +95,7 @@ class SceneIntro extends Phaser.Scene {
 
         //Create background
         this.backgrounds = [];
-        var bg = new ScrollingBackground(this, "nebula05Bg", 50);
+        var bg = new ScrollingBackground(this, "nebulaStoryBg", 50);
         this.backgrounds.push(bg);
     }
 

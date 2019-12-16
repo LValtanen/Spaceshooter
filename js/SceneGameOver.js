@@ -85,7 +85,7 @@ class SceneGameOver extends Phaser.Scene {
 
         //Create background
         this.backgrounds = [];
-        var bg = new ScrollingBackground(this, "nebula05Bg", 50);
+        var bg = new ScrollingBackground(this, "nebulaGameOverBg", 50);
         this.backgrounds.push(bg);
     }
 

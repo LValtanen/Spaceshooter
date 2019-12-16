@@ -6,12 +6,12 @@ class SceneMain extends Phaser.Scene {
     preload() {
         // stage 1 moving background
         this.load.image("starsBg", "content/backgrounds/stars.png");
-        this.load.image("nebula03Bg", "content/backgrounds/nebula03.png");
+        this.load.image("nebulaStage1Bg", "content/backgrounds/nebulaStage1Bg.png");
 
         // game over moving background
-        this.load.image("nebula05Bg", "content/backgrounds/nebula05.png");
+        this.load.image("nebulaGameOverBg", "content/backgrounds/nebulaGameOverBg.png");
         // stage cleared
-        this.load.image("nebula06Bg", "content/backgrounds/nebula06.png");
+        this.load.image("nebulaStageClearedBg", "content/backgrounds/nebulaStageClearedBg.png");
 
         // spritesheet means we are loading an animation instead of a static image
         this.load.spritesheet("sprExplosion", "content/explosion-1.png", {
@@ -91,7 +91,7 @@ class SceneMain extends Phaser.Scene {
 
         this.backgrounds = [];
         for (var i = 0; i < 3; i++) {
-            var keys = ["nebula03Bg", "stars1Bg", "stars2Bg"];
+            var keys = ["nebulaStage1Bg", "stars1Bg", "stars2Bg"];
             var key = keys[i];
             var bg = new ScrollingBackground(this, key, i + 2 * 15);
             this.backgrounds.push(bg);
