@@ -149,57 +149,57 @@ class SceneMain extends Phaser.Scene {
         var enemyType = '';
 
         // enemy spawn event
-        // this.time.addEvent({
-        //     // amount of gun ships being spawned at once
-        //     delay: 500,
-        //     callback: function () {
-        //         var enemy = null;
-        //         var randomizer = Phaser.Math.Between(0, 10);
-        //         if (randomizer >= 7) {
-        //             enemy = new EnemyTank(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         else if (randomizer >= 5) {
-        //             if (this.getEnemiesByType("EnergyBall").length < 5) {
-        //                 enemy = new EnergyBall(
-        //                     this,
-        //                     Phaser.Math.Between(0, this.game.config.width),
-        //                     0
-        //                 );
-        //             }
-        //         }
-        //         else if (randomizer >= 4) {
-        //             enemy = new GunShip(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         else if (randomizer >= 1) {
-        //             enemy = new YellowGunShip(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         else {
-        //             enemy = new FastEnemyShip(
-        //                 this,
-        //                 Phaser.Math.Between(0, this.game.config.width),
-        //                 0
-        //             );
-        //         }
-        //         if (enemy !== null) {
-        //             enemy.setScale(Phaser.Math.Between(10, 20) * 0.1);
-        //             this.enemies.add(enemy);
-        //         }
-        //     },
-        //     callbackScope: this,
-        //     loop: true
-        // });
+        this.time.addEvent({
+            // amount of gun ships being spawned at once
+            delay: 500,
+            callback: function () {
+                var enemy = null;
+                var randomizer = Phaser.Math.Between(0, 10);
+                if (randomizer >= 7) {
+                    enemy = new EnemyTank(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                else if (randomizer >= 5) {
+                    if (this.getEnemiesByType("EnergyBall").length < 5) {
+                        enemy = new EnergyBall(
+                            this,
+                            Phaser.Math.Between(0, this.game.config.width),
+                            0
+                        );
+                    }
+                }
+                else if (randomizer >= 4) {
+                    enemy = new GunShip(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                else if (randomizer >= 1) {
+                    enemy = new YellowGunShip(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                else {
+                    enemy = new FastEnemyShip(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                }
+                if (enemy !== null) {
+                    enemy.setScale(Phaser.Math.Between(10, 20) * 0.1);
+                    this.enemies.add(enemy);
+                }
+            },
+            callbackScope: this,
+            loop: true
+        });
 
         // BOSS spawn event
         this.time.addEvent({
