@@ -7,12 +7,18 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.setData("type", type);
         this.setData("isDead", false);
     }
-    
+
     explode(canDestroy) {
         if (!this.getData("isDead")) {
             // set texture to explosion image, then play animation
-            this.setTexture("sprExplosion");
-            this.play("sprExplosion");
+            if (this.getData("type") == "Stage1Boss") {
+                this.setTexture("sprBossExplosion");
+                this.play("sprBossExplosion");
+            } else {
+                this.setTexture("sprExplosion");
+                this.play("sprExplosion");
+            }
+
             // pick random explosion sound defined in this.sfx in SceneMain
             this.scene.sfx.explosions[Phaser.Math.Between(0, this.scene.sfx.explosions.length - 1)].play();
 
@@ -124,7 +130,7 @@ class BossLaser extends Entity {
         super(scene, x, y, "laserYellow");
         this.body.velocity.y = 444;
         this.body.collideWorldBounds = true;
-        this.body.setBounce(1,1);
+        this.body.setBounce(1, 1);
         this.body.setGravityY(50);
     }
 }
@@ -219,7 +225,7 @@ class YellowGunShip extends Entity {
         this.body.velocity.y = Phaser.Math.Between(50, 100);
         this.body.velocity.x = 200;
         this.body.collideWorldBounds = true;
-        this.body.setBounce(1,1);
+        this.body.setBounce(1, 1);
         this.body.setGravityY(50);
         this.shootTimer = this.scene.time.addEvent({
             delay: 1000,
@@ -269,7 +275,7 @@ class Stage1Boss extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "enemyBossShip1", "Stage1Boss");
         this.body.velocity.y = 100;
-        
+
         this.shootTimer = this.scene.time.addEvent({
             delay: 1000,
             callback: function () {
