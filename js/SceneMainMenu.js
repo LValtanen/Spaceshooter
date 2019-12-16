@@ -1,6 +1,4 @@
-// Extending Phaser.Scene means to build on top of Phaser’s Scene class
 class SceneMainMenu extends Phaser.Scene {
-    // constructor is called immediately when instantiating (creating an instance) the class
     constructor() {
         super({ key: "SceneMainMenu" });
     }
@@ -13,20 +11,14 @@ class SceneMainMenu extends Phaser.Scene {
             this.load.plugin(key, url, true);
         }
         
+        //load game assets
         this.load.image("stars1Bg", "content/backgrounds/Stars1.png");
         this.load.image("stars2Bg", "content/backgrounds/Stars2.png");
         this.load.image("nebula10Bg", "content/backgrounds/nebula10.png");
         this.load.image("spaceCaptain", "content/spaceCaptain.png");
-        this.load.image("sprBtnMenu", "content/buttons/sprBtnMenu.png");
-        this.load.image("sprBtnMenuHover", "content/buttons/sprBtnMenuHover.png");
-        this.load.image("sprBtnStory", "content/buttons/sprBtnStory.png");
-        this.load.image("sprBtnStoryHover", "content/buttons/sprBtnStoryHover.png");
-        this.load.image("sprBtnPlay", "content/buttons/sprBtnPlay.png");
-        this.load.image("sprBtnPlayHover", "content/buttons/sprBtnPlayHover.png");
-        this.load.image("sprBtnPlayDown", "content/buttons/sprBtnPlayDown.png");
-        this.load.image("sprBtnRestart", "content/buttons/sprBtnRestart.png");
-        this.load.image("sprBtnRestartHover", "content/buttons/sprBtnRestartHover.png");
-        this.load.image("sprBtnRestartDown", "content/buttons/sprBtnRestartDown.png");
+        this.load.image("sprBtn", "content/buttons/sprbutton.png");
+        this.load.image("sprBtnHover", "content/buttons/sprbuttonhover.png");
+        this.load.image("sprBtnPressed", "content/buttons/sprbuttonpressed.png");
         this.load.audio("sndBtnOver", "content/audio/zapsplat_multimedia_click_001_19367.mp3");
         this.load.audio("sndBtnDown", "content/audio/zapsplat_science_fiction_spaceship_or_rocket_fly_by_ultra_fast_002_40394.mp3");
     }
@@ -36,47 +28,71 @@ class SceneMainMenu extends Phaser.Scene {
             btnOver: this.sound.add("sndBtnOver"),
             btnDown: this.sound.add("sndBtnDown")
         };
-
+        
+        //Create Play button
         this.btnPlay = this.add.sprite(
             this.game.config.width * 0.5,
             this.game.config.height * 0.5,
-            "sprBtnPlay"
+            "sprBtn"
         );
         this.btnPlay.setInteractive();
         this.btnPlay.on("pointerover", function () {
-            this.btnPlay.setTexture("sprBtnPlayHover"); // set the button texture to sprBtnPlayHover
+            this.btnPlay.setTexture("sprBtnHover"); // set the button texture to sprBtnPlayHover
             this.sfx.btnOver.play(); // play the button over sound
         }, this);
         this.btnPlay.on("pointerout", function () {
-            this.setTexture("sprBtnPlay");
+            this.setTexture("sprBtn");
         });
         this.btnPlay.on("pointerdown", function () {
-            this.btnPlay.setTexture("sprBtnPlayDown");
+            this.btnPlay.setTexture("sprBtnPressed");
             this.sfx.btnDown.play();
         }, this);
         this.btnPlay.on("pointerup", function () {
-            this.btnPlay.setTexture("sprBtnPlay");
+            this.btnPlay.setTexture("sprBtn");
             this.scene.start("SceneMain");
         }, this);
 
+        this.title = this.add.text(this.game.config.width * 0.5, 320, "PLAY", {
+            fontFamily: 'monospace',
+            fontSize: 32,
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+        });
+        this.title.setOrigin(0.5);
+
+        //Create Story button
         this.btnStory = this.add.sprite(
             this.game.config.width * 0.5,
             this.game.config.height * 0.6,
-            "sprBtnStory"
+            "sprBtn"
         ); 
         this.btnStory.setInteractive();
         this.btnStory.on("pointerover", function () {
-            this.btnStory.setTexture("sprBtnStoryHover");
+            this.btnStory.setTexture("sprBtnHover");
             this.sfx.btnOver.play();
         }, this);
         this.btnStory.on("pointerout", function () {
-            this.setTexture("sprBtnStory");
+            this.setTexture("sprBtn");
         });
+        this.btnStory.on("pointerdown", function () {
+            this.btnStory.setTexture("sprBtnPressed");
+            this.sfx.btnDown.play();
+        }, this);
         this.btnStory.on("pointerup", function () {
-            this.btnStory.setTexture("sprBtnStory");
+            this.btnStory.setTexture("sprBtn");
             this.scene.start("SceneIntro");
         }, this);
+        this.title = this.add.text(this.game.config.width * 0.5, 384, "STORY", {
+            fontFamily: 'monospace',
+            fontSize: 32,
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+        });
+        this.title.setOrigin(0.5);
 
+        //Create game title
         this.title = this.add.text(this.game.config.width * 0.5, 128, "AVARUUSAMPUJA", {
             fontFamily: 'monospace',
             fontSize: 45,
@@ -86,6 +102,7 @@ class SceneMainMenu extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
+        //Create backgrounds
         this.backgrounds = [];
         for (var i = 0; i < 3; i++) {
             var keys = ["nebula10Bg", "stars1Bg", "stars2Bg"];
