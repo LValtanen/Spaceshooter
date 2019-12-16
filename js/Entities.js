@@ -48,20 +48,26 @@ class Player extends Entity {
         this.setData("timerShootDelay", 10);
         this.setData("timerShootTick", this.getData("timerShootDelay") - 1);
     }
+    //player movement, and "tilting"
     moveUp() {
+        this.scene.player.setScale(1, 0.8);
         this.body.velocity.y = -this.getData("speed");
     }
     moveDown() {
+        this.scene.player.setScale(1, 0.8);
         this.body.velocity.y = this.getData("speed");
     }
     moveLeft() {
+        this.scene.player.setScale(0.8, 1);
         this.body.velocity.x = -this.getData("speed");
     }
     moveRight() {
+        this.scene.player.setScale(0.8, 1);
         this.body.velocity.x = this.getData("speed");
     }
     update() {
-        // if movement keys are not pressed, player will stay still
+        // if movement keys are not pressed, player will stay still, and scale is back to normal
+        this.scene.player.setScale(1, 1);
         this.body.setVelocity(0, 0);
 
         // player cannot move off-screen
