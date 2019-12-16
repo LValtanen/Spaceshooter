@@ -119,6 +119,16 @@ class EnemyLaser extends Entity {
     }
 }
 
+class BossLaser extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "laserYellow");
+        this.body.velocity.y = 444;
+        this.body.collideWorldBounds = true;
+        this.body.setBounce(1,1);
+        this.body.setGravityY(50);
+    }
+}
+
 class FastEnemyShip extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "enemyShip2", "FastEnemyShip");
@@ -166,6 +176,7 @@ class EnergyBall extends Entity {
     }
 }
 
+// scrapped enemy group - saved for later development
 // class EnergyBallGroup extends Entity {
 //     constructor(scene, x, y) {
 //         super(scene, x, y, "enemyEnergyGroup", "EnergyBallGroup");
@@ -250,6 +261,35 @@ class EnemyTank extends Entity {
                 Math.cos(angle) * speed,
                 Math.sin(angle) * speed
             );
+        }
+    }
+}
+
+class Stage1Boss extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "enemyBossShip1", "Stage1Boss");
+        this.body.velocity.y = 100;
+        
+        this.shootTimer = this.scene.time.addEvent({
+            delay: 1000,
+            callback: function () {
+                var laser = new BossLaser(
+                    this.scene,
+                    this.x,
+                    this.y
+                );
+                laser.setScale(this.scaleX);
+                this.scene.bossLasers.add(laser);
+            },
+            callbackScope: this,
+            loop: true
+        });
+    }
+    onDestroy() {
+        if (this.shootTimer !== undefined) {
+            if (this.shootTimer) {
+                this.shootTimer.remove(false);
+            }
         }
     }
 }
