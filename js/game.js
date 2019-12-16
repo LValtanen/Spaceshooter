@@ -25,5 +25,6 @@ var game = new Phaser.Game(config);
 var score = 0;
 
 var launched = true;
+var bosslaunched = true;
 
 var timer = 500;

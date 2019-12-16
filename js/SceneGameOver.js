@@ -4,7 +4,7 @@ class SceneGameOver extends Phaser.Scene {
     }
     create() {
         //Create title and scoretexts
-        this.title = this.add.text(this.game.config.width * 0.5, 128, "GAME OVER", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.2, "GAME OVER", {
             fontFamily: 'monospace',
             fontSize: 48,
             fontStyle: 'bold',
@@ -13,7 +13,13 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
-        this.finalScore = this.add.text(this.game.config.width * 0.5, 200, "SCORE:" + score);
+        this.finalScore = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.3, "SCORE:" + score, {
+            fontFamily: 'monospace',
+            fontSize: 32,
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+        });
         this.finalScore.setOrigin(0.5);
 
         this.sfx = {
@@ -24,7 +30,7 @@ class SceneGameOver extends Phaser.Scene {
         //Create restart button
         this.btnPlay = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.5,
+            this.game.config.height * 0.7,
             "sprBtn"
         );
         this.btnPlay.setInteractive();
@@ -43,7 +49,8 @@ class SceneGameOver extends Phaser.Scene {
             this.btnPlay.setTexture("sprBtn");
             this.scene.start("SceneMain");
         }, this);
-        this.title = this.add.text(this.game.config.width * 0.5, 320, "RESTART", {
+        
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "RESTART", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
@@ -55,7 +62,7 @@ class SceneGameOver extends Phaser.Scene {
         //Create menu button
         this.btnMenu = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.6,
+            this.game.config.height * 0.8,
             "sprBtn"
         );
         this.btnMenu.setInteractive();
@@ -74,7 +81,7 @@ class SceneGameOver extends Phaser.Scene {
             this.btnMenu.setTexture("sprBtn");
             this.scene.start("SceneMainMenu");
         }, this);
-        this.title = this.add.text(this.game.config.width * 0.5, 384, "MENU", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.8, "MENU", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
