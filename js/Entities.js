@@ -96,7 +96,7 @@ class Player extends Entity {
     // go to stage cleared scene
     onStageCleared() {
         this.scene.time.addEvent({
-            delay: 1000,
+            delay: 3000,
             callback: function () {
                 this.scene.scene.start("SceneStageCleared");
             },
@@ -135,9 +135,6 @@ class BossLaser extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "laserYellow");
         this.body.velocity.y = 444;
-        this.body.collideWorldBounds = true;
-        this.body.setBounce(1, 1);
-        this.body.setGravityY(50);
     }
 }
 
@@ -281,9 +278,8 @@ class Stage1Boss extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "enemyBossShip1", "Stage1Boss");
         this.body.velocity.y = 100;
-
         this.shootTimer = this.scene.time.addEvent({
-            delay: 1000,
+            delay: 300,
             callback: function () {
                 var laser = new BossLaser(
                     this.scene,
@@ -304,7 +300,19 @@ class Stage1Boss extends Entity {
             }
         }
     }
+    update() {
+        if (this.body.y > 100) {
+            this.body.collideWorldBounds = true;
+            this.body.setBounce(1, 1);
+            this.body.setGravityY(50);
+            this.body.velocity.x = 200;
+        } else if (this.body.y > 50 && this.body.y < 100) {
+            this.body.velocity.x = -200;
+        }
+    }
 }
+
+
 
 class ScrollingBackground {
     constructor(scene, key, velocityY) {

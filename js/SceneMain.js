@@ -78,7 +78,7 @@ class SceneMain extends Phaser.Scene {
             align: 'right'
         });
 
-        var bossHp = 10;
+        var bossHp = 100;
 
         this.anims.create({
             key: "sprExplosion",
@@ -377,6 +377,12 @@ class SceneMain extends Phaser.Scene {
                 this.player.setData("timerShootTick", this.player.getData("timerShootDelay") - 1);
                 this.player.setData("isShooting", false);
             }
+        }
+
+        // update boss
+        for (var i = 0; i < this.bossShips.getChildren().length; i++) {
+            var boss = this.bossShips.getChildren()[i];
+            boss.update();
         }
 
 
