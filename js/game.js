@@ -11,7 +11,7 @@ var config = {
     },
     scene: [
         SceneMainMenu,
-        SceneIntro,
+        SceneStory,
         SceneMain,
         SceneStageCleared,
         SceneGameOver
