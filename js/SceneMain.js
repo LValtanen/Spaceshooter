@@ -70,15 +70,14 @@ class SceneMain extends Phaser.Scene {
 
         var hp = 3;
         var hpStr = 'SHIELDS : ';
-        var hpText = this.add.text(this.game.config.width * 0.5, 15, hpStr + hp, {
+        var hpText = this.add.text(this.game.config.width * 0.8, 15, hpStr + hp, {
             fontSize: 35,
             fontStyle: 'fill',
             color: '#ffffff',
             align: 'center'
         });
-        hpText.setOrigin(0.5);
 
-        var bossHp = 10;
+        var bossHp = 100;
 
         this.anims.create({
             key: "sprExplosion",
@@ -127,13 +126,12 @@ class SceneMain extends Phaser.Scene {
 
         var scorePlus = '';
         var scoreStr = 'Score : ';
-        var scoreText = this.add.text(this.game.config.width * 0.25, 15, scoreStr + score, {
+        var scoreText = this.add.text(30, 15, scoreStr + score, {
             fontSize: 35,
             fontStyle: 'fill',
             color: '#ffffff',
             align: 'center'
         });
-        scoreText.setOrigin(0.5);
 
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -158,9 +156,6 @@ class SceneMain extends Phaser.Scene {
             delay: 500,
             callback: function () {
                 var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
-                console.log(boss.body.y);
-
-
                 this.bossShips.add(boss);
             },
             callbackScope: this,
@@ -223,11 +218,6 @@ class SceneMain extends Phaser.Scene {
                     scoreText.text = scoreStr + score + scorePlus;
                 }
 
-                // stage cleared!
-                if (score >= 100) {
-                    player.onStageCleared();
-                }
-
                 enemy.explode(true);
                 playerLaser.destroy();
 
@@ -253,9 +243,6 @@ class SceneMain extends Phaser.Scene {
                 score += 15;
                 scorePlus = enemyType + "   +15";
                 scoreText.text = scoreStr + score + scorePlus;
-                if (score >= 10) {
-                    player.onStageCleared();
-                }
             }
         });
 
@@ -374,6 +361,12 @@ class SceneMain extends Phaser.Scene {
                 this.player.setData("timerShootTick", this.player.getData("timerShootDelay") - 1);
                 this.player.setData("isShooting", false);
             }
+        }
+
+        // update boss
+        for (var i = 0; i < this.bossShips.getChildren().length; i++) {
+            var boss = this.bossShips.getChildren()[i];
+            boss.update();
         }
 
 
