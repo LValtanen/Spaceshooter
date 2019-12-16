@@ -33,7 +33,10 @@ class SceneMain extends Phaser.Scene {
         this.load.image("enemyEnergy1", "content/enemyEnergy1.png");
         // this.load.image("enemyEnergyGroup", "content/enemyEnergy2.png");
 
+        this.load.image("enemyBossShip1", "content/enemyBossShip1.png");
+
         this.load.image("laserRed", "content/laserRed.png");
+        this.load.image("laserYellow", "content/laserYellow.png");
         this.load.image("laserBlue", "content/laserBlue.png");
 
         this.load.audio("sndExplode1", "content/audio/glitchedtones_Machine Glitch 01.mp3");
@@ -67,6 +70,8 @@ class SceneMain extends Phaser.Scene {
             align: 'center'
         });
         hpText.setOrigin(0.5);
+
+        var bossHp = 10;
 
         this.anims.create({
             key: "sprExplosion",
@@ -123,63 +128,83 @@ class SceneMain extends Phaser.Scene {
 
         this.enemies = this.add.group();
         this.enemyLasers = this.add.group();
-        this.playerLasers = this.add.group();
         // this.enemyBalls = this.add.group();
+
+        this.bossShips = this.add.group();
+        this.bossLasers = this.add.group();
+
+        this.playerLasers = this.add.group();
+
 
         var enemyType = '';
 
         // enemy spawn event
+        // this.time.addEvent({
+        //     // amount of gun ships being spawned at once
+        //     delay: 500,
+        //     callback: function () {
+        //         var enemy = null;
+        //         var randomizer = Phaser.Math.Between(0, 10);
+        //         if (randomizer >= 7) {
+        //             enemy = new EnemyTank(
+        //                 this,
+        //                 Phaser.Math.Between(0, this.game.config.width),
+        //                 0
+        //             );
+        //         }
+        //         else if (randomizer >= 5) {
+        //             if (this.getEnemiesByType("EnergyBall").length < 5) {
+        //                 enemy = new EnergyBall(
+        //                     this,
+        //                     Phaser.Math.Between(0, this.game.config.width),
+        //                     0
+        //                 );
+        //             }
+        //         }
+        //         else if (randomizer >= 4) {
+        //             enemy = new GunShip(
+        //                 this,
+        //                 Phaser.Math.Between(0, this.game.config.width),
+        //                 0
+        //             );
+        //         }
+        //         else if (randomizer >= 1) {
+        //             enemy = new YellowGunShip(
+        //                 this,
+        //                 Phaser.Math.Between(0, this.game.config.width),
+        //                 0
+        //             );
+        //         }
+        //         else {
+        //             enemy = new FastEnemyShip(
+        //                 this,
+        //                 Phaser.Math.Between(0, this.game.config.width),
+        //                 0
+        //             );
+        //         }
+        //         if (enemy !== null) {
+        //             enemy.setScale(Phaser.Math.Between(10, 20) * 0.1);
+        //             this.enemies.add(enemy);
+        //         }
+        //     },
+        //     callbackScope: this,
+        //     loop: true
+        // });
+
+        // BOSS spawn event
         this.time.addEvent({
-            // amount of gun ships being spawned at once
             delay: 500,
             callback: function () {
-                var enemy = null;
-                var randomizer = Phaser.Math.Between(0, 10);
-                if (randomizer >= 7) {
-                    enemy = new EnemyTank(
-                        this,
-                        Phaser.Math.Between(0, this.game.config.width),
-                        0
-                    );
-                }
-                else if (randomizer >= 5) {
-                    if (this.getEnemiesByType("EnergyBall").length < 5) {
-                        enemy = new EnergyBall(
-                            this,
-                            Phaser.Math.Between(0, this.game.config.width),
-                            0
-                        );
-                    }
-                }
-                else if (randomizer >= 4) {
-                    enemy = new GunShip(
-                        this,
-                        Phaser.Math.Between(0, this.game.config.width),
-                        0
-                    );
-                }
-                else if (randomizer >= 1) {
-                    enemy = new YellowGunShip(
-                        this,
-                        Phaser.Math.Between(0, this.game.config.width),
-                        0
-                    );
-                }
-                else {
-                    enemy = new FastEnemyShip(
-                        this,
-                        Phaser.Math.Between(0, this.game.config.width),
-                        0
-                    );
-                }
-                if (enemy !== null) {
-                    enemy.setScale(Phaser.Math.Between(10, 20) * 0.1);
-                    this.enemies.add(enemy);
-                }
+                var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
+                console.log(boss.body.y);
+
+
+                this.bossShips.add(boss);
             },
             callbackScope: this,
-            loop: true
+            loop: false
         });
+
 
         // create rotating balls
         // for (var i = 0; i < 60; i++) {
@@ -197,6 +222,7 @@ class SceneMain extends Phaser.Scene {
         //     }
         // });
 
+        // COLLIDERS
         // collider between this.playerLasers and this.enemies
         this.physics.add.collider(this.playerLasers, this.enemies, function (playerLaser, enemy) {
             if (enemy) {
@@ -243,16 +269,38 @@ class SceneMain extends Phaser.Scene {
 
                 enemy.explode(true);
                 playerLaser.destroy();
+
+            }
+        });
+
+        // collider between this.playerLasers and this.bossShips
+        this.physics.add.overlap(this.bossShips, this.playerLasers, function (boss, laser) {
+            if (!boss.getData("isDead") &&
+                !laser.getData("isDead")) {
+                if (bossHp == 0) {
+                    boss.explode(false);
+                    boss.onDestroy();
+                    score += 200;
+                }
+                //  decrease BOSS HP
+                if (bossHp > 0) {
+                    bossHp -= 1;
+                }
+                laser.destroy();
+                enemyType = "   COMMANDER";
+                score += 15;
+                scorePlus = enemyType + "   +15";
+                scoreText.text = scoreStr + score + scorePlus;
             }
         });
 
         // collider between this.player and this.enemies
         this.physics.add.overlap(this.player, this.enemies, function (player, enemy) {
             if (!player.getData("isDead") &&
-                !enemy.getData("isDead")) {
+                !enemy.getData("isDead") &&
+                !enemy.getData("type") == "Stage1Boss") {
                 player.explode(false);
                 player.onDestroy();
-                console.log("SCORE:" + score);
 
                 if (hp > 0) {
                     hp -= hp;
@@ -263,6 +311,21 @@ class SceneMain extends Phaser.Scene {
             }
         });
 
+        // collider between this.player and this.bossShips
+        this.physics.add.overlap(this.player, this.bossShips, function (player, boss) {
+            if (!player.getData("isDead") &&
+                !boss.getData("isDead") &&
+                boss.getData("type") == "Stage1Boss") {
+                player.explode(false);
+                player.onDestroy();
+
+                if (hp > 0) {
+                    hp -= hp;
+                    hpText.text = hpStr + hp;
+                }
+            }
+        });
+
         // collider between this.player and this.enemyLasers
         this.physics.add.overlap(this.player, this.enemyLasers, function (player, laser) {
             if (!player.getData("isDead") &&
@@ -270,7 +333,23 @@ class SceneMain extends Phaser.Scene {
                 if (hp == 0) {
                     player.explode(false);
                     player.onDestroy();
-                    console.log("SCORE:" + score);
+                }
+                //  decrease HP
+                if (hp > 0) {
+                    hp -= 1;
+                    hpText.text = hpStr + hp;
+                }
+                laser.destroy();
+            }
+        });
+
+        // collider between this.player and this.bossLasers
+        this.physics.add.overlap(this.player, this.bossLasers, function (player, laser) {
+            if (!player.getData("isDead") &&
+                !laser.getData("isDead")) {
+                if (hp == 0) {
+                    player.explode(false);
+                    player.onDestroy();
                 }
                 //  decrease HP
                 if (hp > 0) {
@@ -353,6 +432,18 @@ class SceneMain extends Phaser.Scene {
 
         for (var i = 0; i < this.enemyLasers.getChildren().length; i++) {
             var laser = this.enemyLasers.getChildren()[i];
+            laser.update();
+            if (laser.x < -laser.displayWidth ||
+                laser.x > this.game.config.width + laser.displayWidth ||
+                laser.y < -laser.displayHeight * 4 ||
+                laser.y > this.game.config.height + laser.displayHeight) {
+                if (laser) {
+                    laser.destroy();
+                }
+            }
+        }
+        for (var i = 0; i < this.bossLasers.getChildren().length; i++) {
+            var laser = this.bossLasers.getChildren()[i];
             laser.update();
             if (laser.x < -laser.displayWidth ||
                 laser.x > this.game.config.width + laser.displayWidth ||
