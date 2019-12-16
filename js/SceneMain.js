@@ -304,9 +304,6 @@ class SceneMain extends Phaser.Scene {
                 score += 15;
                 scorePlus = enemyType + "   +15";
                 scoreText.text = scoreStr + score + scorePlus;
-                if (score >= 10) {
-                    player.onStageCleared();
-                }
             }
         });
 
