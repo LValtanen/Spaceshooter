@@ -20,6 +20,12 @@ const UserSchema = new Schema({
   highScore: {
     type: Number,
     default: 0
+  },
+  resetToken: {
+    type: String
+  },
+  resetTokenExp: {
+    type: Date
   }
 });
 

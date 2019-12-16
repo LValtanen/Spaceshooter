@@ -27,4 +27,5 @@ setInterval(function() {
       window.location.replace('/index.html');
     }
   });
-}, 10000);
+}, 21600000);
+//21 600 000 = 6 hours
