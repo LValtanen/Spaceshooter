@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const routes = require('./routes/main');
 const secureRoutes = require('./routes/secure');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
 
 // setup mongo connection
 const uri = process.env.MONGO_CONNECTION_URL;
