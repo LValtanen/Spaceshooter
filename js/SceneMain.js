@@ -3,7 +3,7 @@ class SceneMain extends Phaser.Scene {
         super({ key: "SceneMain" });
     }
 
-    create() {
+  create() {
         //reset values at game start
         timer = 500;
         launched = true;
@@ -275,13 +275,19 @@ class SceneMain extends Phaser.Scene {
         }
 
         //launch boss based on score
-        if (score > 2000 && score < 2499 && bosslaunched === true) {
+        if (score > 100 && score < 2499 && bosslaunched === true) {
             this.bossCreator();
         }
         if (score > 4000 && score < 4499 && bosslaunched === true) {
             this.bossCreator();
         }
         if (score > 6000 && score < 6499 && bosslaunched === true) {
+            this.bossCreator();
+        }
+        if (score > 8000 && score < 8499 && bosslaunched === true) {
+            this.bossCreator();
+        }
+        if (score > 10000 && score < 10499 && bosslaunched === true) {
             this.bossCreator();
         }
 
@@ -493,6 +499,7 @@ class SceneMain extends Phaser.Scene {
         });
     }
 
+    //create boss
     bossCreator() {
         var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
         this.bossShips.add(boss);
