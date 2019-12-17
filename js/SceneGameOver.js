@@ -3,7 +3,7 @@ class SceneGameOver extends Phaser.Scene {
         super({ key: "SceneGameOver" });
     }
     create() {
-        //Create title and scoretexts
+        //add titletext
         this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.2, "GAME OVER", {
             fontFamily: 'monospace',
             fontSize: 48,
@@ -13,6 +13,7 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
+        //add scoretext
         this.finalScore = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.3, "SCORE:" + score, {
             fontFamily: 'monospace',
             fontSize: 32,
@@ -22,6 +23,7 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.finalScore.setOrigin(0.5);
 
+        //add button sounds
         this.sfx = {
             btnOver: this.sound.add("sndBtnOver"),
             btnDown: this.sound.add("sndBtnDown")
@@ -96,6 +98,7 @@ class SceneGameOver extends Phaser.Scene {
         this.backgrounds.push(bg);
     }
 
+    //update backgrounds
     update() {
         for (var i = 0; i < this.backgrounds.length; i++) {
             this.backgrounds[i].update();

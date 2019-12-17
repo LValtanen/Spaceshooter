@@ -8,6 +8,8 @@ class SceneMain extends Phaser.Scene {
         launched = true;
         score = 0;
         bosslaunched = true;
+        var bossHp = 100;
+        var enemyType = '';
 
         //create joystick plugin
         this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
@@ -22,6 +24,7 @@ class SceneMain extends Phaser.Scene {
             enable: true
         }).on('update', this.dumpJoyStickState, this);
 
+        //add shields to the top of the screen
         var hp = 3;
         var hpStr = 'SHIELDS: ';
         var hpText = this.add.text(this.game.config.width - 75, 15, hpStr + hp, {
@@ -31,8 +34,17 @@ class SceneMain extends Phaser.Scene {
             align: 'right'
         });
 
-        var bossHp = 100;
+        //add score to the top of the screen
+        var scorePlus = '';
+        var scoreStr = 'SCORE: ';
+        var scoreText = this.add.text(20, 15, scoreStr + score, {
+            fontSize: 45,
+            fontStyle: 'fill',
+            color: '#ffffff',
+            align: 'center'
+        });
 
+        //create explosion animations
         this.anims.create({
             key: "sprExplosion",
             frames: this.anims.generateFrameNumbers("sprExplosion"),
@@ -73,17 +85,7 @@ class SceneMain extends Phaser.Scene {
             "playerShip"
         );
 
-        var player = this.player;
-
-        var scorePlus = '';
-        var scoreStr = 'SCORE: ';
-        var scoreText = this.add.text(20, 15, scoreStr + score, {
-            fontSize: 45,
-            fontStyle: 'fill',
-            color: '#ffffff',
-            align: 'center'
-        });
-
+        //add keyboard keys
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -91,6 +93,7 @@ class SceneMain extends Phaser.Scene {
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
 
+        //put enemies on groups
         this.enemies = this.add.group();
         this.enemyLasers = this.add.group();
         // this.enemyBalls = this.add.group();
@@ -100,22 +103,7 @@ class SceneMain extends Phaser.Scene {
 
         this.playerLasers = this.add.group();
 
-        var enemyType = '';
-
-        // BOSS spawn event
-        // this.time.addEvent({
-        //     delay: 500,
-        //     callback: function () {
-        //         var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
-        //         console.log(boss.body.y);
-
-
-        //         this.bossShips.add(boss);
-        //     },
-        //     callbackScope: this,
-        //     loop: false
-        // });
-
+        // NEW ENEMY IDEA, NOT READY!
         // create rotating balls
         // for (var i = 0; i < 60; i++) {
         //     this.enemyBalls.create(Phaser.Math.Between(0, 600), Phaser.Math.Between(0, 500), 'enemyEnergyGroup');
@@ -366,6 +354,7 @@ class SceneMain extends Phaser.Scene {
         for (var i = 0; i < this.enemyLasers.getChildren().length; i++) {
             var laser = this.enemyLasers.getChildren()[i];
             laser.update();
+            // remove everything that moves off screen
             if (laser.x < -laser.displayWidth ||
                 laser.x > this.game.config.width + laser.displayWidth ||
                 laser.y < -laser.displayHeight * 4 ||
@@ -378,6 +367,7 @@ class SceneMain extends Phaser.Scene {
         for (var i = 0; i < this.bossLasers.getChildren().length; i++) {
             var laser = this.bossLasers.getChildren()[i];
             laser.update();
+            // remove everything that moves off screen
             if (laser.x < -laser.displayWidth ||
                 laser.x > this.game.config.width + laser.displayWidth ||
                 laser.y < -laser.displayHeight * 4 ||
@@ -390,6 +380,7 @@ class SceneMain extends Phaser.Scene {
         for (var i = 0; i < this.playerLasers.getChildren().length; i++) {
             var laser = this.playerLasers.getChildren()[i];
             laser.update();
+            // remove everything that moves off screen
             if (laser.x < -laser.displayWidth ||
                 laser.x > this.game.config.width + laser.displayWidth ||
                 laser.y < -laser.displayHeight * 4 ||
@@ -493,7 +484,6 @@ class SceneMain extends Phaser.Scene {
             loop: false
         });
     }
-
     //create boss
     bossCreator() {
         var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
