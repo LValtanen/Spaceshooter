@@ -2,7 +2,8 @@ class SceneMain extends Phaser.Scene {
     constructor() {
         super({ key: "SceneMain" });
     }
-    create() {
+
+  create() {
         //reset values at game start
         timer = 500;
         launched = true;
@@ -25,6 +26,7 @@ class SceneMain extends Phaser.Scene {
         }).on('update', this.dumpJoyStickState, this);
 
         //add shields to the top of the screen
+        // player hp
         var hp = 3;
         var hpStr = 'SHIELDS: ';
         var hpText = this.add.text(this.game.config.width - 75, 15, hpStr + hp, {
@@ -44,7 +46,7 @@ class SceneMain extends Phaser.Scene {
             align: 'center'
         });
 
-        //create explosion animations
+        // explosion animations
         this.anims.create({
             key: "sprExplosion",
             frames: this.anims.generateFrameNumbers("sprExplosion"),
@@ -68,7 +70,6 @@ class SceneMain extends Phaser.Scene {
             laserDmg: this.sound.add("sndLaserDamage") //mitenköhän tämän saisi toimimaan... this.sfx.laserDmg.play();
         };
 
-        //create background
         this.backgrounds = [];
         for (var i = 0; i < 3; i++) {
             var keys = ["nebulaStage1Bg", "stars1Bg", "stars2Bg"];
@@ -92,8 +93,7 @@ class SceneMain extends Phaser.Scene {
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-
-        //put enemies on groups
+        // ENEMY SHIPS & LASERS
         this.enemies = this.add.group();
         this.enemyLasers = this.add.group();
         // this.enemyBalls = this.add.group();
@@ -102,6 +102,7 @@ class SceneMain extends Phaser.Scene {
         this.bossLasers = this.add.group();
 
         this.playerLasers = this.add.group();
+
 
         // NEW ENEMY IDEA, NOT READY!
         // create rotating balls
@@ -173,9 +174,10 @@ class SceneMain extends Phaser.Scene {
                 if (bossHp == 0) {
                     boss.explode(false);
                     boss.onDestroy();
-                    score += 500;
+                    score += 200;
                     // player.onStageCleared();
                     bosslaunched = true;
+                    bossHp = 100;
                 }
                 //  decrease BOSS HP
                 if (bossHp > 0) {
@@ -253,6 +255,7 @@ class SceneMain extends Phaser.Scene {
             }
         });
     }
+
     update() {
         //launch enemy
         if (launched === true && bosslaunched === true) {
@@ -351,6 +354,7 @@ class SceneMain extends Phaser.Scene {
             }
         }
 
+        // update enemy lasers
         for (var i = 0; i < this.enemyLasers.getChildren().length; i++) {
             var laser = this.enemyLasers.getChildren()[i];
             laser.update();
@@ -364,6 +368,7 @@ class SceneMain extends Phaser.Scene {
                 }
             }
         }
+        // update boss lasers
         for (var i = 0; i < this.bossLasers.getChildren().length; i++) {
             var laser = this.bossLasers.getChildren()[i];
             laser.update();
@@ -377,6 +382,7 @@ class SceneMain extends Phaser.Scene {
                 }
             }
         }
+        // update player lasers
         for (var i = 0; i < this.playerLasers.getChildren().length; i++) {
             var laser = this.playerLasers.getChildren()[i];
             laser.update();
@@ -487,9 +493,6 @@ class SceneMain extends Phaser.Scene {
     //create boss
     bossCreator() {
         var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
-        console.log(boss.body.y);
-
-
         this.bossShips.add(boss);
         bosslaunched = false;
     }
