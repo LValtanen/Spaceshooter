@@ -22,29 +22,29 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image("nebulaStoryBg", "content/backgrounds/nebulaStoryBg.png");
 
         //ships
-        this.load.image("playerShip", "content/playerShip.png");
-        this.load.image("enemyShip1", "content/enemyShip1.png");
-        this.load.image("enemyShip2", "content/enemyShip2.png");
-        this.load.image("enemyShip3", "content/enemyShip3.png");
-        this.load.image("enemyTank1", "content/enemyTank1.png");
-        this.load.image("enemyEnergy1", "content/enemyEnergy1.png");
-        this.load.image("enemyBossShip1", "content/enemyBossShip1.png");
+        this.load.image("playerShip", "content/characters/playerShip.png");
+        this.load.image("enemyShip1", "content/characters/enemyShip1.png");
+        this.load.image("enemyShip2", "content/characters/enemyShip2.png");
+        this.load.image("enemyShip3", "content/characters/enemyShip3.png");
+        this.load.image("enemyTank1", "content/characters/enemyTank1.png");
+        this.load.image("enemyEnergy1", "content/characters/enemyEnergy1.png");
+        this.load.image("enemyBossShip1", "content/characters/enemyBossShip1.png");
 
         //effects
-        this.load.spritesheet("sprExplosion", "content/explosion-1.png", {
+        this.load.spritesheet("sprExplosion", "content/characters/explosion-1.png", {
             frameWidth: 32,
             frameHeight: 32
         });
-        this.load.spritesheet("sprBossExplosion", "content/explosion-2.png", {
+        this.load.spritesheet("sprBossExplosion", "content/characters/explosion-2.png", {
             frameWidth: 100,
             frameHeight: 100
         });
-        this.load.image("laserRed", "content/laserRed.png");
-        this.load.image("laserYellow", "content/laserYellow.png");
-        this.load.image("laserBlue", "content/laserBlue.png");
+        this.load.image("laserRed", "content/characters/laserRed.png");
+        this.load.image("laserYellow", "content/characters/laserYellow.png");
+        this.load.image("laserBlue", "content/characters/laserBlue.png");
 
         // story
-        this.load.image("spaceCaptain", "content/spaceCaptainBorders.png");
+        this.load.image("spaceCaptain", "content/characters/spaceCaptainBorders.png");
 
         //buttons
         this.load.image("sprBtn", "content/buttons/sprbutton.png");
@@ -146,10 +146,10 @@ class SceneMainMenu extends Phaser.Scene {
 
         //Create backgrounds
         this.backgrounds = [];
-        for (var i = 0; i < 3; i++) {
-            var keys = ["nebulaMainMenuBg", "stars1Bg", "stars2Bg"];
+        for (var i = 0; i <= 1; i++) {
+            var keys = ["nebulaMainMenuBg", "stars1Bg"];
             var key = keys[i];
-            var bg = new ScrollingBackground(this, key, i + 2 * 15);
+            var bg = new ScrollingBackground(this, key, Phaser.Math.Between(50, 100));
             this.backgrounds.push(bg);
         }
     }

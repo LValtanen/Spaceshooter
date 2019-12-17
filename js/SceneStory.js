@@ -3,8 +3,7 @@ class SceneStory extends Phaser.Scene {
         super({ key: "SceneStory" });
     }
     create() {
-        this.load.image("nebula10Bg", "content/backgrounds/nebula10.png");
-        //Create title and storytexts
+        //add titletext
         this.title = this.add.text(this.game.config.width * 0.5, 128, "IT'S WAR NOW", {
             fontFamily: 'monospace',
             fontSize: 48,
@@ -14,6 +13,7 @@ class SceneStory extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
+        //add storyrtexts
         this.introtxt = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.3, "The enemy is coming... Go kick some ass, son!", {
             fontFamily: 'monospace',
             fontSize: 15,
@@ -23,6 +23,7 @@ class SceneStory extends Phaser.Scene {
         });
         this.introtxt.setOrigin(0.5);
 
+        //add button sounds
         this.sfx = {
             btnOver: this.sound.add("sndBtnOver"),
             btnDown: this.sound.add("sndBtnDown")
@@ -93,12 +94,17 @@ class SceneStory extends Phaser.Scene {
         //Create spacecaptain
         this.spaceCaptain = this.add.image(this.game.config.width * 0.5, this.game.config.height * 0.5, "spaceCaptain");
 
-        //Create background
+        //create backgrounds
         this.backgrounds = [];
-        var bg = new ScrollingBackground(this, "nebulaStoryBg", 50);
-        this.backgrounds.push(bg);
+        for (var i = 0; i <= 1; i++) {
+            var keys = ["nebulaStoryBg", "stars1Bg"];
+            var key = keys[i];
+            var bg = new ScrollingBackground(this, key, Phaser.Math.Between(50, 100));
+            this.backgrounds.push(bg);
+        }
     }
 
+    //update backgrounds
     update() {
         for (var i = 0; i < this.backgrounds.length; i++) {
             this.backgrounds[i].update();
