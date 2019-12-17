@@ -51,7 +51,7 @@ class SceneGameOver extends Phaser.Scene {
             this.btnPlay.setTexture("sprBtn");
             this.scene.start("SceneMain");
         }, this);
-        
+
         this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "RESTART", {
             fontFamily: 'monospace',
             fontSize: 32,
@@ -92,10 +92,14 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
-        //Create background
+        //create backgrounds
         this.backgrounds = [];
-        var bg = new ScrollingBackground(this, "nebulaGameOverBg", 50);
-        this.backgrounds.push(bg);
+        for (var i = 0; i <= 1; i++) {
+            var keys = ["nebulaGameOverBg", "stars1Bg"];
+            var key = keys[i];
+            var bg = new ScrollingBackground(this, key, Phaser.Math.Between(50, 100));
+            this.backgrounds.push(bg);
+        }
     }
 
     //update backgrounds

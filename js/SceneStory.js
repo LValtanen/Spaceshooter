@@ -94,10 +94,14 @@ class SceneStory extends Phaser.Scene {
         //Create spacecaptain
         this.spaceCaptain = this.add.image(this.game.config.width * 0.5, this.game.config.height * 0.5, "spaceCaptain");
 
-        //Create background
+        //create backgrounds
         this.backgrounds = [];
-        var bg = new ScrollingBackground(this, "nebulaStoryBg", 50);
-        this.backgrounds.push(bg);
+        for (var i = 0; i <= 1; i++) {
+            var keys = ["nebulaStoryBg", "stars1Bg"];
+            var key = keys[i];
+            var bg = new ScrollingBackground(this, key, Phaser.Math.Between(50, 100));
+            this.backgrounds.push(bg);
+        }
     }
 
     //update backgrounds

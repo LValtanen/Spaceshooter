@@ -146,10 +146,10 @@ class SceneMainMenu extends Phaser.Scene {
 
         //Create backgrounds
         this.backgrounds = [];
-        for (var i = 0; i < 3; i++) {
-            var keys = ["nebulaMainMenuBg", "stars1Bg", "stars2Bg"];
+        for (var i = 0; i <= 1; i++) {
+            var keys = ["nebulaMainMenuBg", "stars1Bg"];
             var key = keys[i];
-            var bg = new ScrollingBackground(this, key, i + 2 * 15);
+            var bg = new ScrollingBackground(this, key, Phaser.Math.Between(50, 100));
             this.backgrounds.push(bg);
         }
     }

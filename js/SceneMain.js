@@ -3,7 +3,7 @@ class SceneMain extends Phaser.Scene {
         super({ key: "SceneMain" });
     }
 
-  create() {
+    create() {
         //reset values at game start
         timer = 500;
         launched = true;
@@ -14,7 +14,7 @@ class SceneMain extends Phaser.Scene {
 
         //create joystick plugin
         this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
-            key: "shit",
+            key: "rexvirtualjoystickplugin",
             x: 80,
             y: 560,
             radius: 50,
@@ -70,11 +70,12 @@ class SceneMain extends Phaser.Scene {
             laserDmg: this.sound.add("sndLaserDamage") //mitenköhän tämän saisi toimimaan... this.sfx.laserDmg.play();
         };
 
+        //create backgrounds
         this.backgrounds = [];
-        for (var i = 0; i < 3; i++) {
-            var keys = ["nebulaStage1Bg", "stars1Bg", "stars2Bg"];
+        for (var i = 0; i <= 1; i++) {
+            var keys = ["nebulaStage1Bg", "stars1Bg"];
             var key = keys[i];
-            var bg = new ScrollingBackground(this, key, i + 2 * 15);
+            var bg = new ScrollingBackground(this, key, Phaser.Math.Between(150, 200));
             this.backgrounds.push(bg);
         }
 
@@ -174,7 +175,7 @@ class SceneMain extends Phaser.Scene {
                 if (bossHp == 0) {
                     boss.explode(false);
                     boss.onDestroy();
-                    score += 200;
+                    score += 100;
                     // player.onStageCleared();
                     bosslaunched = true;
                     bossHp = 100;
@@ -185,8 +186,8 @@ class SceneMain extends Phaser.Scene {
                 }
                 laser.destroy();
                 enemyType = "   COMMANDER";
-                score += 15;
-                scorePlus = enemyType + "   +15";
+                score += 5;
+                scorePlus = enemyType + "   +5";
                 scoreText.text = scoreStr + score + scorePlus;
             }
         });
