@@ -3,7 +3,7 @@ class SceneGameOver extends Phaser.Scene {
         super({ key: "SceneGameOver" });
     }
     create() {
-        console.log(score + 'endgamescreenscore');
+        // console.log(score + 'endgamescreenscore');
         var userEmail = sessionStorage.getItem("user")
         var allUsersData = allData;
 
@@ -13,7 +13,6 @@ class SceneGameOver extends Phaser.Scene {
 
         let tämä = allUsersData.find(isCurrentUser)
         console.log(tämä.email + tämä.highScore + ' tämä');
-        console.log(allData[0].email);
 
         if (score > tämä.highScore){
             var user = sessionStorage.getItem("user");
