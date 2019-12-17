@@ -2,53 +2,6 @@ class SceneMain extends Phaser.Scene {
     constructor() {
         super({ key: "SceneMain" });
     }
-
-    preload() {
-        // stage 1 moving background
-        this.load.image("starsBg", "content/backgrounds/stars.png");
-        this.load.image("nebulaStage1Bg", "content/backgrounds/nebulaStage1Bg.png");
-
-        // game over moving background
-        this.load.image("nebulaGameOverBg", "content/backgrounds/nebulaGameOverBg.png");
-        // stage cleared
-        this.load.image("nebulaStageClearedBg", "content/backgrounds/nebulaStageClearedBg.png");
-
-        // spritesheet means we are loading an animation instead of a static image
-        this.load.spritesheet("sprExplosion", "content/explosion-1.png", {
-            frameWidth: 32,
-            frameHeight: 32
-        });
-        this.load.spritesheet("sprBossExplosion", "content/explosion-2.png", {
-            frameWidth: 100,
-            frameHeight: 100
-        });
-
-        this.load.image("playerShip", "content/playerShip.png");
-
-        this.load.spritesheet("sprEnemy0", "content/sprEnemy0.png", {
-            frameWidth: 16,
-            frameHeight: 16
-        });
-
-        this.load.image("enemyShip1", "content/enemyShip1.png");
-        this.load.image("enemyShip2", "content/enemyShip2.png");
-        this.load.image("enemyShip3", "content/enemyShip3.png");
-        this.load.image("enemyTank1", "content/enemyTank1.png");
-        this.load.image("enemyEnergy1", "content/enemyEnergy1.png");
-        // this.load.image("enemyEnergyGroup", "content/enemyEnergy2.png");
-
-        this.load.image("enemyBossShip1", "content/enemyBossShip1.png");
-
-        this.load.image("laserRed", "content/laserRed.png");
-        this.load.image("laserYellow", "content/laserYellow.png");
-        this.load.image("laserBlue", "content/laserBlue.png");
-
-        this.load.audio("sndExplode1", "content/audio/glitchedtones_Machine Glitch 01.mp3");
-        this.load.audio("sndExplode2", "content/audio/glitchedtones_Machine Glitch 02.mp3");
-        this.load.audio("sndLaser", "content/audio/PM_FSSF2_WEAPONS_H2_SHOT_324.mp3");
-        this.load.audio("sndLaserDamage", "content/audio/glitchedtones_Laser Blast Hard.mp3");
-    }
-
     create() {
         //reset values at game start
         timer = 500;
@@ -103,10 +56,7 @@ class SceneMain extends Phaser.Scene {
             laserDmg: this.sound.add("sndLaserDamage") //mitenköhän tämän saisi toimimaan... this.sfx.laserDmg.play();
         };
 
-        // this.backgrounds = [];
-        // var bg = new ScrollingBackground(this, "starsBg", 100);
-        // this.backgrounds.push(bg);
-
+        //create background
         this.backgrounds = [];
         for (var i = 0; i < 3; i++) {
             var keys = ["nebulaStage1Bg", "stars1Bg", "stars2Bg"];
@@ -317,19 +267,25 @@ class SceneMain extends Phaser.Scene {
     }
     update() {
         //launch enemy
-        if (launched === true) {
+        if (launched === true && bosslaunched === true) {
             this.timerEvent();
             launched = false;
         }
 
         //launch boss based on score
-        if (score > 2000 && score < 2499 && bosslaunched === true) {
+        if (score > 100 && score < 2499 && bosslaunched === true) {
             this.bossCreator();
         }
         if (score > 4000 && score < 4499 && bosslaunched === true) {
             this.bossCreator();
         }
         if (score > 6000 && score < 6499 && bosslaunched === true) {
+            this.bossCreator();
+        }
+        if (score > 8000 && score < 8499 && bosslaunched === true) {
+            this.bossCreator();
+        }
+        if (score > 10000 && score < 10499 && bosslaunched === true) {
             this.bossCreator();
         }
 
@@ -538,6 +494,7 @@ class SceneMain extends Phaser.Scene {
         });
     }
 
+    //create boss
     bossCreator() {
         var boss = new Stage1Boss(this, this.game.config.width * 0.5, -150);
         console.log(boss.body.y);
