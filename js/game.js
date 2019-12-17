@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.WEBGL,
-    width: 480,
-    height: 640,
+    width: window.innerWidth,
+    height: window.innerHeight,
     backgroundColor: "black",
     physics: {
         default: "arcade",
