@@ -94,6 +94,9 @@ class SceneMain extends Phaser.Scene {
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        // Extra shields for the player
+        this.shields = this.add.group();
+
         // ENEMY SHIPS & LASERS
         this.enemies = this.add.group();
         this.enemyLasers = this.add.group();
@@ -253,6 +256,16 @@ class SceneMain extends Phaser.Scene {
                     hpText.text = hpStr + hp;
                 }
                 laser.destroy();
+            }
+        });
+
+        // collider between this.player and this.shields
+        this.physics.add.overlap(this.player, this.shields, function (player, shield) {
+            if (!player.getData("isDead") &&
+                !shield.getData("isDead")) {
+                hp += 1;
+                hpText.text = hpStr + hp;
+                shield.destroy();
             }
         });
     }
@@ -426,6 +439,24 @@ class SceneMain extends Phaser.Scene {
         s += ('Force: ' + Math.floor(this.joyStick.force * 100) / 100 + '\n');
         s += ('Angle: ' + Math.floor(this.joyStick.angle * 100) / 100 + '\n');
     }
+
+    // create shields
+    launchShields(){
+        var shield = null;
+        var randomizer = Phaser.Math.Between(0, 100);
+        console.log(randomizer);
+        if (randomizer > 95) {
+            shield = new Shield(
+                this,
+                Phaser.Math.Between(0, this.game.config.width),
+                0
+            );
+        }
+        if (shield !== null) {
+            this.shields.add(shield);
+        }
+    }
+
     //create different enemies
     launchEnemies() {
         var enemy = null;
@@ -479,11 +510,12 @@ class SceneMain extends Phaser.Scene {
         } else {
             timer = 100;
         }
-        console.log(timer);
+        // console.log(timer);
         this.time.addEvent({
             delay: timer,
             callback: function () {
                 this.launchEnemies();
+                this.launchShields()
                 launched = true;
             },
             callbackScope: this,

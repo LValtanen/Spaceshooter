@@ -23,6 +23,7 @@ class SceneMainMenu extends Phaser.Scene {
 
         //ships
         this.load.image("playerShip", "content/characters/playerShip.png");
+        this.load.image("playerShipMenu", "content/characters/playerShipMenu.png");
         this.load.image("enemyShip1", "content/characters/enemyShip1.png");
         this.load.image("enemyShip2", "content/characters/enemyShip2.png");
         this.load.image("enemyShip3", "content/characters/enemyShip3.png");
@@ -43,6 +44,8 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image("laserYellow", "content/characters/laserYellow.png");
         this.load.image("laserBlue", "content/characters/laserBlue.png");
 
+        this.load.image("shield", "content/characters/shieldPack.png");
+
         // story
         this.load.image("spaceCaptain", "content/characters/spaceCaptainBorders.png");
 
@@ -54,7 +57,7 @@ class SceneMainMenu extends Phaser.Scene {
         //audio
         this.load.audio("sndExplode1", "content/audio/glitchedtones_Machine Glitch 01.mp3");
         this.load.audio("sndExplode2", "content/audio/glitchedtones_Machine Glitch 02.mp3");
-        this.load.audio("sndLaser", "content/audio/PM_FSSF2_WEAPONS_H2_SHOT_324.mp3");
+        this.load.audio("sndLaser", "content/audio/pm_ag_4_1_abstract_guns_264.mp3");
         this.load.audio("sndLaserDamage", "content/audio/glitchedtones_Laser Blast Hard.mp3");
         this.load.audio("sndBtnOver", "content/audio/zapsplat_multimedia_click_001_19367.mp3");
         this.load.audio("sndBtnDown", "content/audio/zapsplat_science_fiction_spaceship_or_rocket_fly_by_ultra_fast_002_40394.mp3");
@@ -140,9 +143,9 @@ class SceneMainMenu extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
-        //Create spacecaptain
-        this.playerShip = this.add.image(this.game.config.width * 0.5, this.game.config.height * 0.45, "playerShip");
-        this.playerShip.setScale(4, 4)
+        //Create playership
+        this.playerShip = this.add.image(this.game.config.width * 0.5, this.game.config.height * 0.45, "playerShipMenu");
+        this.playerShip.setScale(1, 1)
 
         //Create backgrounds
         this.backgrounds = [];
