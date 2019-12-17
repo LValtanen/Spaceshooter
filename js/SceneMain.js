@@ -152,7 +152,7 @@ class SceneMain extends Phaser.Scene {
 
         var enemyType = '';
 
-        // BOSS spawn event
+        // vanha BOSS spawn event
         // this.time.addEvent({
         //     delay: 500,
         //     callback: function () {
@@ -317,13 +317,13 @@ class SceneMain extends Phaser.Scene {
     }
     update() {
         //launch enemy
-        if (launched === true) {
+        if (launched === true && bosslaunched === true) {
             this.timerEvent();
             launched = false;
         }
 
         //launch boss based on score
-        if (score > 2000 && score < 2499 && bosslaunched === true) {
+        if (score > 20 && score < 2499 && bosslaunched === true) {
             this.bossCreator();
         }
         if (score > 4000 && score < 4499 && bosslaunched === true) {

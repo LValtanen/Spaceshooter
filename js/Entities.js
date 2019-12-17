@@ -277,9 +277,14 @@ class EnemyTank extends Entity {
 class Stage1Boss extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "enemyBossShip1", "Stage1Boss");
-        this.body.velocity.y = 100;
+        this.body.velocity.y = 150;
+        this.states = {
+            MOVE_DOWN: "MOVE_DOWN",
+            BOUNCE: "BOUNCE"
+        };
+        this.state = this.states.MOVE_DOWN;
         this.shootTimer = this.scene.time.addEvent({
-            delay: 300,
+            delay: 500,
             callback: function () {
                 var laser = new BossLaser(
                     this.scene,
@@ -301,19 +306,15 @@ class Stage1Boss extends Entity {
         }
     }
     update() {
-        if (this.body.y > 100) {
+        if (this.body.y > 50 && this.state == this.states.MOVE_DOWN) {
+            this.state = this.states.BOUNCE;
             this.body.collideWorldBounds = true;
             this.body.setBounce(1, 1);
             this.body.setGravityY(50);
-            this.body.velocity.x = 200;
-        } else if (this.body.y > 50 && this.body.y < 100) {
-            this.body.velocity.x = -200;
+            this.body.velocity.x = 150;
         }
     }
 }
-
-
-
 class ScrollingBackground {
     constructor(scene, key, velocityY) {
         this.scene = scene;
