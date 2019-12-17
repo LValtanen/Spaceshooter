@@ -264,7 +264,7 @@ class SceneMain extends Phaser.Scene {
         }
 
         //launch boss based on score
-        if (score > 100 && score < 2499 && bosslaunched === true) {
+        if (score > 2000 && score < 2499 && bosslaunched === true) {
             this.bossCreator();
         }
         if (score > 4000 && score < 4499 && bosslaunched === true) {
@@ -331,7 +331,6 @@ class SceneMain extends Phaser.Scene {
             var boss = this.bossShips.getChildren()[i];
             boss.update();
         }
-
 
         // rotate energy balls
         // Phaser.Actions.RotateAround(this.enemyBalls.getChildren(), { x: 400, y: 300 }, 0.01);
