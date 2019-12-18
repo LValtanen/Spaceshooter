@@ -12,17 +12,17 @@ class SceneMain extends Phaser.Scene {
         var enemyType = '';
 
         //create joystick plugin
-        this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
-            key: "rexvirtualjoystickplugin",
-            x: 80,
-            y: 560,
-            radius: 50,
-            base: this.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 50).setAlpha(0.3),
-            thumb: this.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 25).setAlpha(0.4),
-            dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
-            // forceMin: 16,
-            enable: true
-        }).on('update', this.dumpJoyStickState, this);
+        // this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
+        //     key: "rexvirtualjoystickplugin",
+        //     x: 80,
+        //     y: 560,
+        //     radius: 50,
+        //     base: this.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 50).setAlpha(0.3),
+        //     thumb: this.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 25).setAlpha(0.4),
+        //     dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
+        //     // forceMin: 16,
+        //     enable: true
+        // }).on('update', this.dumpJoyStickState, this);
 
         //put player on the map
         this.player = new Player(
@@ -36,21 +36,22 @@ class SceneMain extends Phaser.Scene {
         // player hp
         var hp = 3;
         var hpStr = 'SHIELDS: ';
-        var hpText = this.add.text(this.game.config.width - 75, 15, hpStr + hp, {
-            fontSize: 100,
-            fontStyle: 'fill',
-            color: '#ffffff',
-            align: 'right'
+        var hpText = this.add.text(this.game.config.width - 105, 15, hpStr + hp, {
+            fontFamily: 'monospace',
+            fontSize: 14,
+            color: '#FFFFFF',
+            align: 'center'
         });
 
         //add ammo to the top of the screen
         var ammoStr = 'AMMO: ';
-        ammoText = this.add.text(this.game.config.width * 0.5, 15, ammoStr + this.player.getData("ammo"), {
-            fontSize: 100,
-            fontStyle: 'fill',
-            color: '#ffffff',
+        ammoText = this.add.text(this.game.config.width - 105, 35, ammoStr + this.player.getData("ammo"), {
+            fontFamily: 'monospace',
+            fontSize: 14,
+            color: '#FFFFFF',
             align: 'center'
         });
+
 
         // shields and ammo
         this.loot = this.add.group();
@@ -59,9 +60,9 @@ class SceneMain extends Phaser.Scene {
         var scorePlus = '';
         var scoreStr = 'SCORE: ';
         var scoreText = this.add.text(20, 15, scoreStr + score, {
-            fontSize: 100,
-            fontStyle: 'fill',
-            color: '#ffffff',
+            fontFamily: 'monospace',
+            fontSize: 14,
+            color: '#FFFFFF',
             align: 'center'
         });
 
@@ -331,57 +332,54 @@ class SceneMain extends Phaser.Scene {
         if (score > 2000 && score < 2499 && bosslaunched === true) {
             this.bossCreator();
         }
-        if (score > 4000 && score < 4499 && bosslaunched === true) {
+        if (score > 5000 && score < 5499 && bosslaunched === true) {
             this.bossCreator();
         }
-        if (score > 6000 && score < 6499 && bosslaunched === true) {
+        if (score > 9000 && score < 9499 && bosslaunched === true) {
             this.bossCreator();
         }
-        if (score > 8000 && score < 8499 && bosslaunched === true) {
-            this.bossCreator();
-        }
-        if (score > 10000 && score < 10499 && bosslaunched === true) {
+        if (score > 14000 && score < 14499 && bosslaunched === true) {
             this.bossCreator();
         }
 
         //update joystick plugin, set player movement
-        var cursorKeys = this.joyStick.createCursorKeys();
-        var s = '';
-        for (var name in cursorKeys) {
-            if (cursorKeys[name].isDown) {
-                s += name + '';
-            }
-        }
+        // var cursorKeys = this.joyStick.createCursorKeys();
+        // var s = '';
+        // for (var name in cursorKeys) {
+        //     if (cursorKeys[name].isDown) {
+        //         s += name + '';
+        //     }
+        // }
 
         // update player
         if (!this.player.getData("isDead")) {
             this.player.update();
-            if (s === 'up' || this.keyW.isDown) {
+            if ( /*s === 'up' || */this.keyW.isDown) {
                 this.player.moveUp();
-            } else if (s === 'down' || this.keyS.isDown) {
+            } else if (/*s === 'down' || */this.keyS.isDown) {
                 this.player.moveDown();
             }
-            if (s === 'left' || this.keyA.isDown) {
+            if (/*s === 'left' || */this.keyA.isDown) {
                 this.player.moveLeft();
-            } else if (s === 'right' || this.keyD.isDown) {
+            } else if (/*s === 'right' || */this.keyD.isDown) {
                 this.player.moveRight();
             }
-            if (s === 'upleft') {
-                this.player.moveUp();
-                this.player.moveLeft();
-            }
-            if (s === 'upright') {
-                this.player.moveUp();
-                this.player.moveRight();
-            }
-            if (s === 'downleft') {
-                this.player.moveDown();
-                this.player.moveLeft();
-            }
-            if (s === 'downright') {
-                this.player.moveDown();
-                this.player.moveRight();
-            }
+            // if (s === 'upleft') {
+            //     this.player.moveUp();
+            //     this.player.moveLeft();
+            // }
+            // if (s === 'upright') {
+            //     this.player.moveUp();
+            //     this.player.moveRight();
+            // }
+            // if (s === 'downleft') {
+            //     this.player.moveDown();
+            //     this.player.moveLeft();
+            // }
+            // if (s === 'downright') {
+            //     this.player.moveDown();
+            //     this.player.moveRight();
+            // }
             if (this.keySpace.isDown) {
                 this.player.setData("isShooting", true);
                 ammoText.text = "AMMO: " + this.player.getData("ammo");
@@ -527,18 +525,18 @@ class SceneMain extends Phaser.Scene {
         return arr;
     }
     //if joystick not pressed, move to zero
-    dumpJoyStickState() {
-        var cursorKeys = this.joyStick.createCursorKeys();
-        var s = 'Key down: ';
-        for (var name in cursorKeys) {
-            if (cursorKeys[name].isDown) {
-                s += name + ' ';
-            }
-        }
-        s += '\n';
-        s += ('Force: ' + Math.floor(this.joyStick.force * 100) / 100 + '\n');
-        s += ('Angle: ' + Math.floor(this.joyStick.angle * 100) / 100 + '\n');
-    }
+    // dumpJoyStickState() {
+    //     var cursorKeys = this.joyStick.createCursorKeys();
+    //     var s = 'Key down: ';
+    //     for (var name in cursorKeys) {
+    //         if (cursorKeys[name].isDown) {
+    //             s += name + ' ';
+    //         }
+    //     }
+    //     s += '\n';
+    //     s += ('Force: ' + Math.floor(this.joyStick.force * 100) / 100 + '\n');
+    //     s += ('Angle: ' + Math.floor(this.joyStick.angle * 100) / 100 + '\n');
+    // }
 
     //create different enemies
     launchEnemies() {
@@ -589,11 +587,10 @@ class SceneMain extends Phaser.Scene {
     //timer event for spawning enemies and loot
     timerEvent() {
         if (timer > 100) {
-            timer -= score / 800;
+            timer -= score / 1000;
         } else {
-            timer = 100;
+            timer = 200;
         }
-        // console.log(timer);
         this.time.addEvent({
             delay: timer,
             callback: function () {
