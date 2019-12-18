@@ -38,7 +38,7 @@ class SceneMain extends Phaser.Scene {
         var hp = 3;
         var hpStr = 'SHIELDS: ';
         var hpText = this.add.text(this.game.config.width - 75, 15, hpStr + hp, {
-            fontSize: 45,
+            fontSize: 100,
             fontStyle: 'fill',
             color: '#ffffff',
             align: 'right'
@@ -46,11 +46,11 @@ class SceneMain extends Phaser.Scene {
 
         //add ammo to the top of the screen
         var ammoStr = 'AMMO: ';
-        var ammoText = this.add.text(this.game.config.width - 200, 15, ammoStr + this.player.getData("ammo"), {
-            fontSize: 45,
+        ammoText = this.add.text(this.game.config.width * 0.5, 15, ammoStr + this.player.getData("ammo"), {
+            fontSize: 100,
             fontStyle: 'fill',
             color: '#ffffff',
-            align: 'right'
+            align: 'center'
         });
 
         // shields and ammo
@@ -60,7 +60,7 @@ class SceneMain extends Phaser.Scene {
         var scorePlus = '';
         var scoreStr = 'SCORE: ';
         var scoreText = this.add.text(20, 15, scoreStr + score, {
-            fontSize: 45,
+            fontSize: 100,
             fontStyle: 'fill',
             color: '#ffffff',
             align: 'center'
@@ -123,7 +123,7 @@ class SceneMain extends Phaser.Scene {
             callback: function () {
                 var lootItem = null;
                 var randomizer = Phaser.Math.Between(0, 10);
-                if (randomizer > 6 && this.player.getData("ammo") < 30) {
+                if (randomizer > 7) {
                     lootItem = new Ammo(
                         this,
                         Phaser.Math.Between(0, this.game.config.width),
@@ -385,6 +385,7 @@ class SceneMain extends Phaser.Scene {
             }
             if (this.keySpace.isDown) {
                 this.player.setData("isShooting", true);
+                ammoText.text = "AMMO: " + this.player.getData("ammo");
             } else {
                 this.player.setData("timerShootTick", this.player.getData("timerShootDelay") - 1);
                 this.player.setData("isShooting", false);
