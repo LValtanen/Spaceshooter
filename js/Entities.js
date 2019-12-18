@@ -90,7 +90,6 @@ class Player extends Entity {
 
                 this.scene.sfx.laser.play(); // play laser sound effect
                 this.setData("ammo", this.getData("ammo") - 1);
-                console.log("AMMO " + this.getData("ammo"));
                 this.setData("timerShootTick", 0);
             }
         }
@@ -109,7 +108,7 @@ class Player extends Entity {
     // go to game over scene
     onDestroy() {
         this.scene.time.addEvent({
-            delay: 1000,
+            delay: 2000,
             callback: function () {
                 //post new highscore if high enough
                 allScores.sort(function (a, b) { return b.score - a.score });
@@ -121,11 +120,10 @@ class Player extends Entity {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ name: player, score: score })
-                    }).then(res => res.json())
-                        .then(res => console.log(res));
+                    }).then(res => res.json());
                 }
                 this.scene.time.addEvent({
-                    delay: 2000,
+                    delay: 2500,
                     callback: function () {
                         //get all highscore
                         fetch('http://localhost:3000/api/scores/', {
