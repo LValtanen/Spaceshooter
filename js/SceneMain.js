@@ -36,18 +36,18 @@ class SceneMain extends Phaser.Scene {
         // player hp
         var hp = 3;
         var hpStr = 'SHIELDS: ';
-        var hpText = this.add.text(this.game.config.width - 75, 15, hpStr + hp, {
-            fontSize: 100,
-            fontStyle: 'fill',
+        var hpText = this.add.text(this.game.config.width - 105, 15, hpStr + hp, {
+            fontFamily: 'monospace',
+            fontSize: 14,
             color: '#ffffff',
             align: 'right'
         });
 
         //add ammo to the top of the screen
         var ammoStr = 'AMMO: ';
-        ammoText = this.add.text(this.game.config.width * 0.5, 15, ammoStr + this.player.getData("ammo"), {
-            fontSize: 100,
-            fontStyle: 'fill',
+        ammoText = this.add.text(this.game.config.width - 105, 35, ammoStr + this.player.getData("ammo"), {
+            fontFamily: 'monospace',
+            fontSize: 14,
             color: '#ffffff',
             align: 'center'
         });
@@ -59,8 +59,8 @@ class SceneMain extends Phaser.Scene {
         var scorePlus = '';
         var scoreStr = 'SCORE: ';
         var scoreText = this.add.text(20, 15, scoreStr + score, {
-            fontSize: 100,
-            fontStyle: 'fill',
+            fontFamily: 'monospace',
+            fontSize: 14,
             color: '#ffffff',
             align: 'center'
         });

@@ -90,7 +90,7 @@ class Player extends Entity {
 
                 this.scene.sfx.laser.play(); // play laser sound effect
                 this.setData("ammo", this.getData("ammo") - 1);
-                console.log("AMMO " + this.getData("ammo"));
+                // console.log("AMMO " + this.getData("ammo"));
                 this.setData("timerShootTick", 0);
             }
         }
