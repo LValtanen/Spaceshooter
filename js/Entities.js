@@ -49,7 +49,7 @@ class Player extends Entity {
         super(scene, x, y, key, "Player");
         this.body.collideWorldBounds = true;
         this.setData("speed", 300);
-        // this.setData("score", 0);
+        this.setData("ammo", 100);
         this.setData("isShooting", false);
         this.setData("timerShootDelay", 10);
         this.setData("timerShootTick", this.getData("timerShootDelay") - 1);
@@ -80,7 +80,7 @@ class Player extends Entity {
         this.x = Phaser.Math.Clamp(this.x, 0, this.scene.game.config.width);
         this.y = Phaser.Math.Clamp(this.y, 0, this.scene.game.config.height);
 
-        if (this.getData("isShooting")) {
+        if (this.getData("isShooting") && this.getData("ammo") > 0) {
             if (this.getData("timerShootTick") < this.getData("timerShootDelay")) {
                 this.setData("timerShootTick", this.getData("timerShootTick") + 1); // every game update, increase timerShootTick by one until we reach the value of timerShootDelay
             }
@@ -89,6 +89,8 @@ class Player extends Entity {
                 this.scene.playerLasers.add(laser);
 
                 this.scene.sfx.laser.play(); // play laser sound effect
+                this.setData("ammo", this.getData("ammo") - 1);
+                console.log("AMMO " + this.getData("ammo"));
                 this.setData("timerShootTick", 0);
             }
         }
@@ -127,7 +129,14 @@ class PlayerLaser extends Entity {
 class Shield extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "shield", "Shield");
-        this.body.velocity.y = 200;
+        this.body.velocity.y = Phaser.Math.Between(200, 350);
+    }
+}
+
+class Ammo extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "ammo", "Ammo");
+        this.body.velocity.y = Phaser.Math.Between(200, 350);
     }
 }
 

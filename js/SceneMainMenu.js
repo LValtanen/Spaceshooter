@@ -45,6 +45,7 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image("laserBlue", "content/characters/laserBlue.png");
 
         this.load.image("shield", "content/characters/shieldPack.png");
+        this.load.image("ammo", "content/characters/ammoPack.png");
 
         // story
         this.load.image("spaceCaptain", "content/characters/spaceCaptainBorders.png");
