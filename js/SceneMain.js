@@ -24,22 +24,42 @@ class SceneMain extends Phaser.Scene {
             enable: true
         }).on('update', this.dumpJoyStickState, this);
 
-        //add shields to the top of the screen
+        //put player on the map
+        this.player = new Player(
+            this,
+            this.game.config.width * 0.5,
+            this.game.config.height * 0.8,
+            "playerShip"
+        );
+
+        //add shields (hp) to the top of the screen
         // player hp
         var hp = 3;
         var hpStr = 'SHIELDS: ';
         var hpText = this.add.text(this.game.config.width - 75, 15, hpStr + hp, {
-            fontSize: 45,
+            fontSize: 100,
             fontStyle: 'fill',
             color: '#ffffff',
             align: 'right'
         });
 
+        //add ammo to the top of the screen
+        var ammoStr = 'AMMO: ';
+        ammoText = this.add.text(this.game.config.width * 0.5, 15, ammoStr + this.player.getData("ammo"), {
+            fontSize: 100,
+            fontStyle: 'fill',
+            color: '#ffffff',
+            align: 'center'
+        });
+
+        // shields and ammo
+        this.loot = this.add.group();
+
         //add score to the top of the screen
         var scorePlus = '';
         var scoreStr = 'SCORE: ';
         var scoreText = this.add.text(20, 15, scoreStr + score, {
-            fontSize: 45,
+            fontSize: 100,
             fontStyle: 'fill',
             color: '#ffffff',
             align: 'center'
@@ -78,14 +98,6 @@ class SceneMain extends Phaser.Scene {
             this.backgrounds.push(bg);
         }
 
-        //put player on the map
-        this.player = new Player(
-            this,
-            this.game.config.width * 0.5,
-            this.game.config.height * 0.8,
-            "playerShip"
-        );
-
         //add keyboard keys
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -103,6 +115,35 @@ class SceneMain extends Phaser.Scene {
 
         this.playerLasers = this.add.group();
 
+        // loot spawn event
+        this.time.addEvent({
+            // amount of gun ships being spawned at once
+            delay: 1000,
+            callback: function () {
+                var lootItem = null;
+                var randomizer = Phaser.Math.Between(0, 10);
+                if (randomizer > 7) {
+                    lootItem = new Ammo(
+                        this,
+                        Phaser.Math.Between(0, this.game.config.width),
+                        0
+                    );
+                } else if (randomizer < 1) {
+                    if (this.getLootByType("Shield").length < 2) {
+                        lootItem = new Shield(
+                            this,
+                            Phaser.Math.Between(0, this.game.config.width),
+                            0
+                        );
+                    }
+                }
+                if (lootItem !== null) {
+                    this.loot.add(lootItem);
+                }
+            },
+            callbackScope: this,
+            loop: true
+        });
 
         // NEW ENEMY IDEA, NOT READY!
         // create rotating balls
@@ -254,9 +295,32 @@ class SceneMain extends Phaser.Scene {
                 laser.destroy();
             }
         });
+
+        // collider between this.player and this.shields
+        this.physics.add.overlap(this.player, this.loot, function (player, shield) {
+            if (!player.getData("isDead") &&
+                !shield.getData("isDead") &&
+                shield.getData("type") == "Shield") {
+                hp += 1;
+                hpText.text = hpStr + hp;
+                shield.destroy();
+            }
+        });
+
+        // collider between this.player and this.extraAmmo
+        this.physics.add.overlap(this.player, this.loot, function (player, ammo) {
+            if (!player.getData("isDead") &&
+                !ammo.getData("isDead") &&
+                ammo.getData("type") == "Ammo") {
+                player.setData("ammo", player.getData("ammo") + 15);
+                ammoText.text = ammoStr + player.getData("ammo");
+                ammo.destroy();
+            }
+        });
     }
 
     update() {
+
         //launch enemy
         if (launched === true && bosslaunched === true) {
             this.timerEvent();
@@ -320,6 +384,7 @@ class SceneMain extends Phaser.Scene {
             }
             if (this.keySpace.isDown) {
                 this.player.setData("isShooting", true);
+                ammoText.text = "AMMO: " + this.player.getData("ammo");
             } else {
                 this.player.setData("timerShootTick", this.player.getData("timerShootDelay") - 1);
                 this.player.setData("isShooting", false);
@@ -417,11 +482,28 @@ class SceneMain extends Phaser.Scene {
             }
         }
 
+        // update loot
+        for (var i = 0; i < this.loot.getChildren().length; i++) {
+            var lootItem = this.loot.getChildren()[i];
+            lootItem.update();
+            // remove everything that moves off screen
+            if (lootItem.x < -lootItem.displayWidth ||
+                lootItem.x > this.game.config.width + lootItem.displayWidth ||
+                lootItem.y < -lootItem.displayHeight * 4 ||
+                lootItem.y > this.game.config.height + lootItem.displayHeight) {
+                if (lootItem) {
+                    lootItem.destroy();
+                }
+            }
+        }
+
         // update backgrounds
         for (var i = 0; i < this.backgrounds.length; i++) {
             this.backgrounds[i].update();
         }
     }
+
+    // GAME FUNCTIONS
 
     getEnemiesByType(type) {
         var arr = [];
@@ -429,6 +511,17 @@ class SceneMain extends Phaser.Scene {
             var enemy = this.enemies.getChildren()[i];
             if (enemy.getData("type") == type) {
                 arr.push(enemy);
+            }
+        }
+        return arr;
+    }
+
+    getLootByType(type) {
+        var arr = [];
+        for (var i = 0; i < this.loot.getChildren().length; i++) {
+            var lootItem = this.loot.getChildren()[i];
+            if (lootItem.getData("type") == type) {
+                arr.push(lootItem);
             }
         }
         return arr;
@@ -446,6 +539,7 @@ class SceneMain extends Phaser.Scene {
         s += ('Force: ' + Math.floor(this.joyStick.force * 100) / 100 + '\n');
         s += ('Angle: ' + Math.floor(this.joyStick.angle * 100) / 100 + '\n');
     }
+
     //create different enemies
     launchEnemies() {
         var enemy = null;
@@ -492,14 +586,14 @@ class SceneMain extends Phaser.Scene {
             this.enemies.add(enemy);
         }
     }
-    //timer event for spawning enemies
+    //timer event for spawning enemies and loot
     timerEvent() {
         if (timer > 100) {
             timer -= score / 800;
         } else {
             timer = 100;
         }
-        console.log(timer);
+        // console.log(timer);
         this.time.addEvent({
             delay: timer,
             callback: function () {
