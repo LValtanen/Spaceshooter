@@ -14,15 +14,38 @@ class SceneGameOver extends Phaser.Scene {
         this.title.setOrigin(0.5);
 
         //add scoretext
-        this.finalScore = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.3, "SCORE:" + score, {
+        this.finalScore = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.28, "YOUR SCORE - " + score, {
             fontFamily: 'monospace',
-            fontSize: 32,
+            fontSize: 22,
             fontStyle: 'bold',
             color: '#FFFFFF',
             align: 'center'
         });
         this.finalScore.setOrigin(0.5);
 
+        //add scoretext
+        this.Highscore = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.35, "HALL OF FAME", {
+            fontFamily: 'monospace',
+            fontSize: 32,
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+        });
+        this.Highscore.setOrigin(0.5);
+
+        //add scoretext
+        allScores.sort(function (a, b) { return b.score - a.score });
+        for (i = 0; i < allScores.length && i < 5; i++) {
+            this.highScoreList = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.4 + (i * 20),
+                allScores[i].name + ' - ' + allScores[i].score, {
+                fontFamily: 'monospace',
+                fontSize: 22,
+                fontStyle: 'bold',
+                color: '#FFFFFF',
+                align: 'center'
+            });
+            this.highScoreList.setOrigin(0.5);
+        }
         //add button sounds
         this.sfx = {
             btnOver: this.sound.add("sndBtnOver"),
@@ -52,14 +75,14 @@ class SceneGameOver extends Phaser.Scene {
             this.scene.start("SceneMain");
         }, this);
 
-        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "RESTART", {
+        this.restart = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "RESTART", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
             color: '#FFFFFF',
             align: 'center'
         });
-        this.title.setOrigin(0.5);
+        this.restart.setOrigin(0.5);
 
         //Create menu button
         this.btnMenu = this.add.sprite(
@@ -83,14 +106,14 @@ class SceneGameOver extends Phaser.Scene {
             this.btnMenu.setTexture("sprBtn");
             this.scene.start("SceneMainMenu");
         }, this);
-        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.8, "MENU", {
+        this.menu = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.8, "MENU", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
             color: '#FFFFFF',
             align: 'center'
         });
-        this.title.setOrigin(0.5);
+        this.menu.setOrigin(0.5);
 
         //create backgrounds
         this.backgrounds = [];

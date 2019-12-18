@@ -109,7 +109,46 @@ class Player extends Entity {
         this.scene.time.addEvent({
             delay: 1000,
             callback: function () {
-                this.scene.scene.start("SceneGameOver");
+                //post new highscore if high enough
+                allScores.sort(function (a, b) { return b.score - a.score });
+                if (score > allScores[4].score) {
+                    fetch('http://localhost:3000/api/scores/', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name: player, score: score })
+                    }).then(res => res.json())
+                        .then(res => console.log(res));
+                }
+                this.scene.time.addEvent({
+                    delay: 2000,
+                    callback: function () {
+                        //get all highscore
+                        fetch('http://localhost:3000/api/scores/', {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json, text/plain, */*',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(data => data.json())
+                            .then(data => allScores = data)
+                    },
+                    callbackScope: this,
+                    loop: false
+                });
+
+
+                this.scene.time.addEvent({
+                    delay: 3000,
+                    callback: function () {
+
+                        this.scene.scene.start("SceneGameOver");
+                    },
+                    callbackScope: this,
+                    loop: false
+                });
             },
             callbackScope: this,
             loop: false
@@ -121,6 +160,7 @@ class PlayerLaser extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "laserBlue");
         this.body.velocity.y = -200;
+        this.setDepth(-1);
     }
 }
 
@@ -128,6 +168,7 @@ class EnemyLaser extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "laserRed");
         this.body.velocity.y = 222;
+        this.setDepth(-1);
     }
 }
 
@@ -135,6 +176,7 @@ class BossLaser extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "laserYellow");
         this.body.velocity.y = 444;
+        this.setDepth(-1);
     }
 }
 
