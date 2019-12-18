@@ -2,7 +2,6 @@ class SceneMain extends Phaser.Scene {
     constructor() {
         super({ key: "SceneMain" });
     }
-
     create() {
         //reset values at game start
         timer = 500;
@@ -391,6 +390,27 @@ class SceneMain extends Phaser.Scene {
                 this.player.setData("isShooting", false);
             }
         }
+
+        //create particles if player is alive
+        if (!this.player.getData("isDead")) {
+        var particles = this.add.particles('fire');
+        particles.setDepth(-1);
+        particles.createEmitter({
+            alpha: { start: 1, end: 0 },
+            scale: { start: 0.2, end: 0.2 },
+            tint: { start: 0xff945e, end: 0xff945e },
+            speed: 1,
+            accelerationY: 300,
+            angle: { min: -85, max: -95 },
+            rotate: { min: -180, max: 180 },
+            lifespan: { min: 40, max: 60 },
+            blendMode: 'ADD',
+            frequency: 60,
+            maxParticles: 1,
+            x: this.player.x,
+            y: this.player.y+6
+        });
+    }
 
         // update boss
         for (var i = 0; i < this.bossShips.getChildren().length; i++) {

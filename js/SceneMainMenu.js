@@ -4,6 +4,18 @@ class SceneMainMenu extends Phaser.Scene {
     }
 
     preload() {
+        //preload highscores
+        fetch('http://localhost:3000/api/scores/', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then(data => data.json())
+            .then(data => allScores = data)
+            .then(allScores.sort(function (a, b) { return b.score - a.score }));
+            
+
         //load joystick plugin if not already loaded
         if (!this.plugins.plugins[0]) {
             var key = 'rexvirtualjoystickplugin';
@@ -32,6 +44,7 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image("enemyBossShip1", "content/characters/enemyBossShip1.png");
 
         //effects
+        this.load.image('fire', 'content/characters/firetrail.png');
         this.load.spritesheet("sprExplosion", "content/characters/explosion-1.png", {
             frameWidth: 32,
             frameHeight: 32
@@ -133,6 +146,38 @@ class SceneMainMenu extends Phaser.Scene {
             align: 'center'
         });
         this.title.setOrigin(0.5);
+
+        //Create player name button
+        this.btnName = this.add.sprite(
+            this.game.config.width * 0.5,
+            this.game.config.height * 0.9,
+            "sprBtn"
+        );
+        this.btnName.setInteractive();
+        this.btnName.on("pointerover", function () {
+            this.btnName.setTexture("sprBtnHover");
+            this.sfx.btnOver.play();
+        }, this);
+        this.btnName.on("pointerout", function () {
+            this.setTexture("sprBtn");
+        });
+        this.btnName.on("pointerdown", function () {
+            this.btnName.setTexture("sprBtnPressed");
+            this.sfx.btnDown.play();
+        }, this);
+        this.btnName.on("pointerup", function () {
+            this.btnName.setTexture("sprBtn");
+            player = prompt("Please enter your name", player);
+        }, this);
+
+        this.playerName = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.9, "NAME", {
+            fontFamily: 'monospace',
+            fontSize: 32,
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+        });
+        this.playerName.setOrigin(0.5);
 
         //Create game title
         this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.2, "BLARGON 7", {
