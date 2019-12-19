@@ -87,7 +87,9 @@ class SceneMain extends Phaser.Scene {
                 this.sound.add("sndExplode2")
             ],
             laser: this.sound.add("sndLaser"),
-            laserDmg: this.sound.add("sndLaserDamage") //mitenköhän tämän saisi toimimaan... this.sfx.laserDmg.play();
+            laserDmg: this.sound.add("sndLaserDamage"),
+            pickLoot: this.sound.add("sndPickLoot"),
+            gameOver: this.sound.add("sndGameOver")
         };
 
         //create backgrounds
@@ -275,6 +277,7 @@ class SceneMain extends Phaser.Scene {
                 if (hp > 0) {
                     hp -= 1;
                     hpText.text = hpStr + hp;
+                    player.onLaserDmg();
                 }
                 laser.destroy();
             }
@@ -292,6 +295,7 @@ class SceneMain extends Phaser.Scene {
                 if (hp > 0) {
                     hp -= 1;
                     hpText.text = hpStr + hp;
+                    player.onLaserDmg();
                 }
                 laser.destroy();
             }
@@ -304,6 +308,7 @@ class SceneMain extends Phaser.Scene {
                 shield.getData("type") == "Shield") {
                 hp += 1;
                 hpText.text = hpStr + hp;
+                shield.onDestroy();
                 shield.destroy();
             }
         });
@@ -315,6 +320,7 @@ class SceneMain extends Phaser.Scene {
                 ammo.getData("type") == "Ammo") {
                 player.setData("ammo", player.getData("ammo") + 15);
                 ammoText.text = ammoStr + player.getData("ammo");
+                ammo.onDestroy();
                 ammo.destroy();
             }
         });
@@ -389,26 +395,37 @@ class SceneMain extends Phaser.Scene {
             }
         }
 
+        if (this.player.getData("isDead")) {
+            this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "LOADING...", {
+                fontFamily: 'monospace',
+                fontSize: 25,
+                fontStyle: 'bold',
+                color: '#FFFFFF',
+                align: 'center'
+            });
+            this.title.setOrigin(0.5);
+        }
+
         //create particles if player is alive
         if (!this.player.getData("isDead")) {
-        var particles = this.add.particles('fire');
-        particles.setDepth(-1);
-        particles.createEmitter({
-            alpha: { start: 1, end: 0 },
-            scale: { start: 0.2, end: 0.2 },
-            tint: { start: 0xff945e, end: 0xff945e },
-            speed: 1,
-            accelerationY: 300,
-            angle: { min: -85, max: -95 },
-            rotate: { min: -180, max: 180 },
-            lifespan: { min: 40, max: 60 },
-            blendMode: 'ADD',
-            frequency: 60,
-            maxParticles: 1,
-            x: this.player.x,
-            y: this.player.y+6
-        });
-    }
+            var particles = this.add.particles('fire');
+            particles.setDepth(-1);
+            particles.createEmitter({
+                alpha: { start: 1, end: 0 },
+                scale: { start: 0.2, end: 0.2 },
+                tint: { start: 0xff945e, end: 0xff945e },
+                speed: 1,
+                accelerationY: 300,
+                angle: { min: -85, max: -95 },
+                rotate: { min: -180, max: 180 },
+                lifespan: { min: 40, max: 60 },
+                blendMode: 'ADD',
+                frequency: 60,
+                maxParticles: 1,
+                x: this.player.x,
+                y: this.player.y + 6
+            });
+        }
 
         // update boss
         for (var i = 0; i < this.bossShips.getChildren().length; i++) {
@@ -607,4 +624,6 @@ class SceneMain extends Phaser.Scene {
         this.bossShips.add(boss);
         bosslaunched = false;
     }
+
+
 }
