@@ -10,9 +10,9 @@ This is a Space Shooter game project, created with a 3-person dev team for the A
 
 3. Create your .env
 
-MONGO_CONNECTION_URL=PLACEHOLDER
-EMAIL=PLACEHOLDER
-PASSWORD=PLACEHOLDER
+MONGO_CONNECTION_URL=PLACEHOLDER  
+EMAIL=PLACEHOLDER  
+PASSWORD=PLACEHOLDER  
 EMAIL_PROVIDER=Gmail
 
 5. run node app.js
