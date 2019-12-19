@@ -20,7 +20,6 @@ class SceneMain extends Phaser.Scene {
             },
         }).then(data => data.json())
             .then(data => allData = data)
-            .then(allData => console.log(allData))
 
         //create joystick plugin
         // this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
@@ -597,7 +596,7 @@ class SceneMain extends Phaser.Scene {
     }
     //timer event for spawning enemies and loot
     timerEvent() {
-        if (timer > 100) {
+        if (timer > 200) {
             timer -= score / 1000;
         } else {
             timer = 200;

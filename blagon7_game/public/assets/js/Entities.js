@@ -121,16 +121,12 @@ class Player extends Entity {
                 //post new highscore if high enough
                 var userEmail = sessionStorage.getItem("user")
                 var allUsersData = allData;
-                console.log(score);
-                score = score;
-                console.log('123=' + score);
 
                 function isCurrentUser(data) {
                     return data.email === userEmail
                 }
 
-                let oldData = allUsersData.find(isCurrentUser)
-                console.log(oldData.email + oldData.highScore + ' tämä');
+                let oldData = allUsersData.find(isCurrentUser);
 
                 if (score > oldData.highScore) {
                     var user = sessionStorage.getItem("user");
