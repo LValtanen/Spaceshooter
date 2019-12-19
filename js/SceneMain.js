@@ -56,6 +56,7 @@ class SceneMain extends Phaser.Scene {
         // shields and ammo
         this.loot = this.add.group();
 
+
         //add score to the top of the screen
         var scorePlus = '';
         var scoreStr = 'SCORE: ';
