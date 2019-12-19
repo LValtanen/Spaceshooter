@@ -19,8 +19,12 @@ class Entity extends Phaser.GameObjects.Sprite {
                 this.play("sprExplosion");
             }
 
-            // pick random explosion sound defined in this.sfx in SceneMain
-            this.scene.sfx.explosions[Phaser.Math.Between(0, this.scene.sfx.explosions.length - 1)].play();
+            // pick explosion sound defined in this.sfx in SceneMain
+            if (this.getData("type") == "EnergyBall") {
+                this.scene.sfx.explosions[0].play();
+            } else {
+                this.scene.sfx.explosions[1].play();
+            }
 
             if (this.shootTimer !== undefined) {
                 if (this.shootTimer) {
@@ -94,6 +98,9 @@ class Player extends Entity {
             }
         }
     }
+    onLaserDmg() {
+        this.scene.sfx.laserDmg.play();
+    }
     // go to stage cleared scene
     onStageCleared() {
         this.scene.time.addEvent({
@@ -110,6 +117,7 @@ class Player extends Entity {
         this.scene.time.addEvent({
             delay: 2000,
             callback: function () {
+                this.scene.sfx.gameOver.play();
                 //post new highscore if high enough
                 allScores.sort(function (a, b) { return b.score - a.score });
                 if (score > allScores[4].score) {
@@ -143,7 +151,6 @@ class Player extends Entity {
                 this.scene.time.addEvent({
                     delay: 3000,
                     callback: function () {
-
                         this.scene.scene.start("SceneGameOver");
                     },
                     callbackScope: this,
@@ -169,12 +176,18 @@ class Shield extends Entity {
         super(scene, x, y, "shield", "Shield");
         this.body.velocity.y = Phaser.Math.Between(200, 350);
     }
+    onDestroy() {
+        this.scene.sfx.pickLoot.play();
+    }
 }
 
 class Ammo extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "ammo", "Ammo");
         this.body.velocity.y = Phaser.Math.Between(200, 350);
+    }
+    onDestroy() {
+        this.scene.sfx.pickLoot.play();
     }
 }
 

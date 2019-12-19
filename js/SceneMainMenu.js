@@ -69,12 +69,14 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image("sprBtnPressed", "content/buttons/sprbuttonpressed.png");
 
         //audio
-        this.load.audio("sndExplode1", "content/audio/glitchedtones_Machine Glitch 01.mp3");
-        this.load.audio("sndExplode2", "content/audio/glitchedtones_Machine Glitch 02.mp3");
-        this.load.audio("sndLaser", "content/audio/pm_ag_4_1_abstract_guns_264.mp3");
-        this.load.audio("sndLaserDamage", "content/audio/glitchedtones_Laser Blast Hard.mp3");
-        this.load.audio("sndBtnOver", "content/audio/zapsplat_multimedia_click_001_19367.mp3");
-        this.load.audio("sndBtnDown", "content/audio/zapsplat_science_fiction_spaceship_or_rocket_fly_by_ultra_fast_002_40394.mp3");
+        this.load.audio("sndExplode1", "content/audio/sndExplode1.mp3");
+        this.load.audio("sndExplode2", "content/audio/sndExplode2.mp3");
+        this.load.audio("sndLaser", "content/audio/sndLaser.mp3");
+        this.load.audio("sndLaserDamage", "content/audio/sndLaserDamage.mp3");
+        this.load.audio("sndBtnOver", "content/audio/sndBtnOver.mp3");
+        this.load.audio("sndBtnDown", "content/audio/sndBtnDown.mp3");
+        this.load.audio("sndPickLoot", "content/audio/sndPickLoot.mp3");
+        this.load.audio("sndGameOver", "content/audio/sndgameOver.mp3");
     }
 
     create() {
