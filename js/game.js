@@ -24,3 +24,14 @@ var game = new Phaser.Game(config);
 
 var score = 0;
 
+var ammoText = '';
+
+var allScores = [];
+
+var launched = true;
+
+var bosslaunched = true;
+
+var timer = 500;
+
+var player = 'anonymous'

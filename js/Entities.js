@@ -7,14 +7,24 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.setData("type", type);
         this.setData("isDead", false);
     }
-    
+
     explode(canDestroy) {
         if (!this.getData("isDead")) {
             // set texture to explosion image, then play animation
-            this.setTexture("sprExplosion");
-            this.play("sprExplosion");
-            // pick random explosion sound defined in this.sfx in SceneMain
-            this.scene.sfx.explosions[Phaser.Math.Between(0, this.scene.sfx.explosions.length - 1)].play();
+            if (this.getData("type") == "Stage1Boss") {
+                this.setTexture("sprBossExplosion");
+                this.play("sprBossExplosion");
+            } else {
+                this.setTexture("sprExplosion");
+                this.play("sprExplosion");
+            }
+
+            // pick explosion sound defined in this.sfx in SceneMain
+            if (this.getData("type") == "EnergyBall") {
+                this.scene.sfx.explosions[0].play();
+            } else {
+                this.scene.sfx.explosions[1].play();
+            }
 
             if (this.shootTimer !== undefined) {
                 if (this.shootTimer) {
@@ -43,32 +53,38 @@ class Player extends Entity {
         super(scene, x, y, key, "Player");
         this.body.collideWorldBounds = true;
         this.setData("speed", 300);
-        // this.setData("score", 0);
+        this.setData("ammo", 100);
         this.setData("isShooting", false);
         this.setData("timerShootDelay", 10);
         this.setData("timerShootTick", this.getData("timerShootDelay") - 1);
     }
+    //player movement, and "tilting"
     moveUp() {
+        this.scene.player.setScale(1, 0.8);
         this.body.velocity.y = -this.getData("speed");
     }
     moveDown() {
+        this.scene.player.setScale(1, 0.8);
         this.body.velocity.y = this.getData("speed");
     }
     moveLeft() {
+        this.scene.player.setScale(0.8, 1);
         this.body.velocity.x = -this.getData("speed");
     }
     moveRight() {
+        this.scene.player.setScale(0.8, 1);
         this.body.velocity.x = this.getData("speed");
     }
     update() {
-        // if movement keys are not pressed, player will stay still
+        // if movement keys are not pressed, player will stay still, and scale is back to normal
+        this.scene.player.setScale(1, 1);
         this.body.setVelocity(0, 0);
 
         // player cannot move off-screen
         this.x = Phaser.Math.Clamp(this.x, 0, this.scene.game.config.width);
         this.y = Phaser.Math.Clamp(this.y, 0, this.scene.game.config.height);
 
-        if (this.getData("isShooting")) {
+        if (this.getData("isShooting") && this.getData("ammo") > 0) {
             if (this.getData("timerShootTick") < this.getData("timerShootDelay")) {
                 this.setData("timerShootTick", this.getData("timerShootTick") + 1); // every game update, increase timerShootTick by one until we reach the value of timerShootDelay
             }
@@ -77,14 +93,18 @@ class Player extends Entity {
                 this.scene.playerLasers.add(laser);
 
                 this.scene.sfx.laser.play(); // play laser sound effect
+                this.setData("ammo", this.getData("ammo") - 1);
                 this.setData("timerShootTick", 0);
             }
         }
     }
+    onLaserDmg() {
+        this.scene.sfx.laserDmg.play();
+    }
     // go to stage cleared scene
     onStageCleared() {
         this.scene.time.addEvent({
-            delay: 1000,
+            delay: 3000,
             callback: function () {
                 this.scene.scene.start("SceneStageCleared");
             },
@@ -95,9 +115,47 @@ class Player extends Entity {
     // go to game over scene
     onDestroy() {
         this.scene.time.addEvent({
-            delay: 1000,
+            delay: 2000,
             callback: function () {
-                this.scene.scene.start("SceneGameOver");
+                this.scene.sfx.gameOver.play();
+                //post new highscore if high enough
+                allScores.sort(function (a, b) { return b.score - a.score });
+                if (score > allScores[4].score) {
+                    fetch('http://localhost:3000/api/scores/', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name: player, score: score })
+                    }).then(res => res.json());
+                }
+                this.scene.time.addEvent({
+                    delay: 2500,
+                    callback: function () {
+                        //get all highscore
+                        fetch('http://localhost:3000/api/scores/', {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json, text/plain, */*',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(data => data.json())
+                            .then(data => allScores = data)
+                    },
+                    callbackScope: this,
+                    loop: false
+                });
+
+
+                this.scene.time.addEvent({
+                    delay: 3000,
+                    callback: function () {
+                        this.scene.scene.start("SceneGameOver");
+                    },
+                    callbackScope: this,
+                    loop: false
+                });
             },
             callbackScope: this,
             loop: false
@@ -109,6 +167,27 @@ class PlayerLaser extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "laserBlue");
         this.body.velocity.y = -200;
+        this.setDepth(-1);
+    }
+}
+
+class Shield extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "shield", "Shield");
+        this.body.velocity.y = Phaser.Math.Between(200, 350);
+    }
+    onDestroy() {
+        this.scene.sfx.pickLoot.play();
+    }
+}
+
+class Ammo extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "ammo", "Ammo");
+        this.body.velocity.y = Phaser.Math.Between(200, 350);
+    }
+    onDestroy() {
+        this.scene.sfx.pickLoot.play();
     }
 }
 
@@ -116,6 +195,15 @@ class EnemyLaser extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "laserRed");
         this.body.velocity.y = 222;
+        this.setDepth(-1);
+    }
+}
+
+class BossLaser extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "laserYellow");
+        this.body.velocity.y = 444;
+        this.setDepth(-1);
     }
 }
 
@@ -166,6 +254,7 @@ class EnergyBall extends Entity {
     }
 }
 
+// scrapped enemy group - saved for later development
 // class EnergyBallGroup extends Entity {
 //     constructor(scene, x, y) {
 //         super(scene, x, y, "enemyEnergyGroup", "EnergyBallGroup");
@@ -208,7 +297,7 @@ class YellowGunShip extends Entity {
         this.body.velocity.y = Phaser.Math.Between(50, 100);
         this.body.velocity.x = 200;
         this.body.collideWorldBounds = true;
-        this.body.setBounce(1,1);
+        this.body.setBounce(1, 1);
         this.body.setGravityY(50);
         this.shootTimer = this.scene.time.addEvent({
             delay: 1000,
@@ -254,6 +343,47 @@ class EnemyTank extends Entity {
     }
 }
 
+class Stage1Boss extends Entity {
+    constructor(scene, x, y) {
+        super(scene, x, y, "enemyBossShip1", "Stage1Boss");
+        this.body.velocity.y = 150;
+        this.states = {
+            MOVE_DOWN: "MOVE_DOWN",
+            BOUNCE: "BOUNCE"
+        };
+        this.state = this.states.MOVE_DOWN;
+        this.shootTimer = this.scene.time.addEvent({
+            delay: 500,
+            callback: function () {
+                var laser = new BossLaser(
+                    this.scene,
+                    this.x,
+                    this.y
+                );
+                laser.setScale(this.scaleX);
+                this.scene.bossLasers.add(laser);
+            },
+            callbackScope: this,
+            loop: true
+        });
+    }
+    onDestroy() {
+        if (this.shootTimer !== undefined) {
+            if (this.shootTimer) {
+                this.shootTimer.remove(false);
+            }
+        }
+    }
+    update() {
+        if (this.body.y > 50 && this.state == this.states.MOVE_DOWN) {
+            this.state = this.states.BOUNCE;
+            this.body.collideWorldBounds = true;
+            this.body.setBounce(1, 1);
+            this.body.setGravityY(50);
+            this.body.velocity.x = 150;
+        }
+    }
+}
 class ScrollingBackground {
     constructor(scene, key, velocityY) {
         this.scene = scene;
@@ -263,14 +393,11 @@ class ScrollingBackground {
         this.createLayers();
     }
     createLayers() {
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i <= 1; i++) {
             // creating two backgrounds will allow a continuous scroll
             var layer = this.scene.add.sprite(0, 0, this.key);
             layer.y = (layer.displayHeight * i);
-            var flipX = Phaser.Math.Between(0, 10) >= 5 ? -1 : 1;
-            var flipY = Phaser.Math.Between(0, 10) >= 5 ? -1 : 1;
-            layer.setScale(flipX * 2, flipY * 2);
-            layer.setDepth(-5 - (i - 1));
+            layer.setDepth(-1);
             this.scene.physics.world.enableBody(layer, 0);
             layer.body.velocity.y = this.velocityY;
             this.layers.add(layer);
@@ -278,7 +405,7 @@ class ScrollingBackground {
     }
     update() {
         // background layers wrap back around to the bottom
-        if (this.layers.getChildren()[0].y > 0) {
+        if (this.layers.getChildren()[0].y > 1) {
             for (var i = 0; i < this.layers.getChildren().length; i++) {
                 var layer = this.layers.getChildren()[i];
                 layer.y = (-layer.displayHeight) + (layer.displayHeight * i);

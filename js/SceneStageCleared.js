@@ -3,6 +3,7 @@ class SceneStageCleared extends Phaser.Scene {
         super({ key: "SceneStageCleared" });
     }
     create() {
+        //create title and scoretexts
         this.title = this.add.text(this.game.config.width * 0.5, 128, "STAGE CLEARED", {
             fontFamily: 'monospace',
             fontSize: 48,
@@ -12,61 +13,84 @@ class SceneStageCleared extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
-        var player = new Player(this);
-
-        this.finalScore = this.add.text(this.game.config.width * 0.5, 200, "SCORE:" + player.getData("score"));
+        this.finalScore = this.add.text(this.game.config.width * 0.5, 200, "SCORE:" + score);
         this.finalScore.setOrigin(0.5);
 
+        //create button audio
         this.sfx = {
             btnOver: this.sound.add("sndBtnOver"),
             btnDown: this.sound.add("sndBtnDown")
         };
 
-        this.btnRestart = this.add.sprite(
+        //create restart button
+        this.btnPlay = this.add.sprite(
             this.game.config.width * 0.5,
             this.game.config.height * 0.5,
-            "sprBtnRestart"
+            "sprBtn"
         );
-        this.btnRestart.setInteractive();
-        this.btnRestart.on("pointerover", function () {
-            this.btnRestart.setTexture("sprBtnRestartHover"); // set the button texture to sprBtnPlayHover
-            this.sfx.btnOver.play(); // play the button over sound
+        this.btnPlay.setInteractive();
+        this.btnPlay.on("pointerover", function () {
+            this.btnPlay.setTexture("sprBtnHover");
+            this.sfx.btnOver.play();
         }, this);
-        this.btnRestart.on("pointerout", function () {
-            this.setTexture("sprBtnRestart");
+        this.btnPlay.on("pointerout", function () {
+            this.setTexture("sprBtn");
         });
-        this.btnRestart.on("pointerdown", function () {
-            this.btnRestart.setTexture("sprBtnRestartDown");
+        this.btnPlay.on("pointerdown", function () {
+            this.btnPlay.setTexture("sprBtnPressed");
             this.sfx.btnDown.play();
         }, this);
-        this.btnRestart.on("pointerup", function () {
-            this.btnRestart.setTexture("sprBtnRestart");
+        this.btnPlay.on("pointerup", function () {
+            this.btnPlay.setTexture("sprBtn");
             this.scene.start("SceneMain");
         }, this);
+        this.title = this.add.text(this.game.config.width * 0.5, 320, "RESTART", {
+            fontFamily: 'monospace',
+            fontSize: 32,
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+        });
+        this.title.setOrigin(0.5);
 
+        //Create menu button
         this.btnMenu = this.add.sprite(
             this.game.config.width * 0.5,
             this.game.config.height * 0.6,
-            "sprBtnMenu"
+            "sprBtn"
         );
         this.btnMenu.setInteractive();
         this.btnMenu.on("pointerover", function () {
-            this.btnMenu.setTexture("sprBtnMenuHover");
+            this.btnMenu.setTexture("sprBtnHover");
             this.sfx.btnOver.play();
         }, this);
         this.btnMenu.on("pointerout", function () {
-            this.setTexture("sprBtnMenu");
+            this.setTexture("sprBtn");
         });
+        this.btnMenu.on("pointerdown", function () {
+            this.btnMenu.setTexture("sprBtnPressed");
+            this.sfx.btnDown.play();
+        }, this);
         this.btnMenu.on("pointerup", function () {
-            this.btnMenu.setTexture("sprBtnMenu");
+            this.btnMenu.setTexture("sprBtn");
             this.scene.start("SceneMainMenu");
         }, this);
+        this.title = this.add.text(this.game.config.width * 0.5, 384, "MENU", {
+            fontFamily: 'monospace',
+            fontSize: 32,
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+        });
+        this.title.setOrigin(0.5);
 
+        //create background
         this.backgrounds = [];
         var bg = new ScrollingBackground(this, "nebulaStageClearedBg", 50);
         this.backgrounds.push(bg);
     }
     update() {
+        //update scrolling backgrounds
         for (var i = 0; i < this.backgrounds.length; i++) {
             this.backgrounds[i].update();
         }
