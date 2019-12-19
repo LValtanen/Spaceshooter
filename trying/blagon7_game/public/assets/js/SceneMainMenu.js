@@ -11,19 +11,6 @@ class SceneMainMenu extends Phaser.Scene {
             this.load.plugin(key, url, true);
         }
 
-        //load game assets
-        // this.load.image("stars1Bg", "assets/content/backgrounds/Stars1.png");
-        // this.load.image("stars2Bg", "assets/content/backgrounds/Stars2.png");
-        // this.load.image("nebulaMainMenuBg", "assets/content/backgrounds/nebulaMainMenuBg.png");
-        // this.load.image("nebulaStoryBg", "assets/content/backgrounds/nebulaStoryBg.png");
-        // this.load.image("spaceCaptain", "assets/content/spaceCaptain.png");
-        // this.load.image("sprBtn", "assets/content/buttons/sprbutton.png");
-        // this.load.image("sprBtnHover", "assets/content/buttons/sprbuttonhover.png");
-        // this.load.image("sprBtnPressed", "assets/content/buttons/sprbuttonpressed.png");
-        // this.load.audio("sndBtnOver", "assets/content/audio/zapsplat_multimedia_click_001_19367.mp3");
-        // this.load.audio("sndBtnDown", "assets/content/audio/zapsplat_science_fiction_spaceship_or_rocket_fly_by_ultra_fast_002_40394.mp3");
-
-
         //backgrounds
         this.load.image("starsBg", "assets/content/backgrounds/stars.png");
         this.load.image("nebulaStage1Bg", "assets/content/backgrounds/nebulaStage1Bg.png");
@@ -70,14 +57,14 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image("sprBtnPressed", "assets/content/buttons/sprbuttonpressed.png");
 
         //audio
-        this.load.audio("sndExplode1", "assets/content/audio/glitchedtones_Machine Glitch 01.mp3");
-        this.load.audio("sndExplode2", "assets/content/audio/glitchedtones_Machine Glitch 02.mp3");
-        this.load.audio("sndLaser", "assets/content/audio/pm_ag_4_1_abstract_guns_264.mp3");
-        this.load.audio("sndLaserDamage", "assets/content/audio/glitchedtones_Laser Blast Hard.mp3");
-        this.load.audio("sndBtnOver", "assets/content/audio/zapsplat_multimedia_click_001_19367.mp3");
-        this.load.audio("sndBtnDown", "assets/content/audio/zapsplat_science_fiction_spaceship_or_rocket_fly_by_ultra_fast_002_40394.mp3");
-
-
+        this.load.audio("sndExplode1", "assets/content/audio/sndExplode1.mp3");
+        this.load.audio("sndExplode2", "assets/content/audio/sndExplode2.mp3");
+        this.load.audio("sndLaser", "assets/content/audio/sndLaser.mp3");
+        this.load.audio("sndLaserDamage", "assets/content/audio/sndLaserDamage.mp3");
+        this.load.audio("sndBtnOver", "assets/content/audio/sndBtnOver.mp3");
+        this.load.audio("sndBtnDown", "assets/content/audio/sndBtnDown.mp3");
+        this.load.audio("sndPickLoot", "assets/content/audio/sndPickLoot.mp3");
+        this.load.audio("sndGameOver", "assets/content/audio/sndgameOver.mp3");
 
     }
 
