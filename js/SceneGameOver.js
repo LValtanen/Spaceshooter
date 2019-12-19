@@ -3,8 +3,29 @@ class SceneGameOver extends Phaser.Scene {
         super({ key: "SceneGameOver" });
     }
     create() {
+
+        var userEmail = sessionStorage.getItem('user');
+
+
+
+
+        if (usersession.score < score && usersession.name == useragain) {
+            var user = sessionStorage.getItem("user");
+            var points = score;
+            fetch('/submit-score', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: user, score: points })
+            }).then(res => res.json())
+                .then(res => console.log(res));
+        }
+
+
         //Create title and scoretexts
-        this.title = this.add.text(this.game.config.width * 0.5, 128, "GAME OVER", {
+  this.title = this.add.text(this.game.config.width * 0.5, 128, "GAME OVER", {
             fontFamily: 'monospace',
             fontSize: 48,
             fontStyle: 'bold',
@@ -12,6 +33,51 @@ class SceneGameOver extends Phaser.Scene {
             align: 'center'
         });
         this.title.setOrigin(0.5);
+
+        this.title = this.add.text(this.game.config.width * 0.5, 215, 'NIMI: ' + allData[0].name + '     SCORE: ' + allData[0].highScore, {
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center'
+        });
+        this.title.setOrigin(0.5);
+
+        this.title2 = this.add.text(this.game.config.width * 0.5, 230, 'NIMI: ' + allData[1].name + '     SCORE: ' + allData[1].highScore, {
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center'
+        });
+        this.title2.setOrigin(0.5);
+
+        this.title3 = this.add.text(this.game.config.width * 0.5, 245, 'NIMI: ' + allData[2].name + '     SCORE: ' + allData[2].highScore, {
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center'
+        });
+        this.title3.setOrigin(0.5);
+
+        this.title4 = this.add.text(this.game.config.width * 0.5, 260, 'NIMI: ' + allData[3].name + '     SCORE: ' + allData[3].highScore, {
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center'
+        });
+        this.title4.setOrigin(0.5);
+
+        this.title5 = this.add.text(this.game.config.width * 0.5, 275, 'NIMI: ' + allData[4].name + '     SCORE: ' + allData[4].highScore, {
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center'
+        });
+        this.title5.setOrigin(0.5);
 
         this.finalScore = this.add.text(this.game.config.width * 0.5, 200, "SCORE:" + score);
         this.finalScore.setOrigin(0.5);

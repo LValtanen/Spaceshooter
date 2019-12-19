@@ -45,6 +45,18 @@ class SceneMain extends Phaser.Scene {
     create() {
         //reset score at game start
         score = 0;
+
+        // fetch('/scores', {
+        //     method: 'GET',
+        //     headers: {
+        //         'Accept': 'application/json, text/plain, */*',
+        //         'Content-Type': 'application/json'
+        //     },
+        // }).then(data => data.json())
+        //     .then(data => allData = data)
+        //     .then(allData => console.log(allData))
+
+
         //create joystick plugin
         this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
             key: "shit",

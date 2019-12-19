@@ -3,39 +3,21 @@ class SceneGameOver extends Phaser.Scene {
         super({ key: "SceneGameOver" });
     }
 
-    // preload(){
-
-    // }
-
     create() {
 
-        
-        // var userEmail = sessionStorage.getItem("user")
-        // var allUsersData = allData;
-
-        // function isCurrentUser(data) {
-        //     return data.email === userEmail
-        // } 
-
-        // let oldData = allUsersData.find(isCurrentUser)
-        // console.log(oldData.email + oldData.highScore + ' tämä');
-
-        // if (score > oldData.highScore){
-        //     var user = sessionStorage.getItem("user");
-        //     var points = score;
-        //     fetch('/submit-score', {
-        //         method: 'post',
-        //         headers: {
-        //             'Accept': 'application/json, text/plain, */*',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ email: user, score: points })
-        //     }).then(res => res.json())
-        //         .then(res => console.log(res));
-        // }
-
         //Create title and scoretexts
-        this.title = this.add.text(this.game.config.width * 0.5, 128, "GAME OVER", {
+
+        this.titleGlobal = this.add.text(this.game.config.width * 0.5, 178, "GLOBAL HIGHSCORES", {
+            fontFamily: 'monospace',
+            fontSize: 30,
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center'
+        });
+        this.titleGlobal.setOrigin(0.5);
+
+
+        this.title = this.add.text(this.game.config.width * 0.5, 110, "GAME OVER", {
             fontFamily: 'monospace',
             fontSize: 48,
             fontStyle: 'bold',
@@ -44,7 +26,7 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
-        this.title = this.add.text(this.game.config.width * 0.5, 215, '1. ' + allData[0].name + ' - ' + allData[0].highScore, {
+        this.title = this.add.text(this.game.config.width * 0.5, 230, '1. ' + allData[0].name + ' - ' + allData[0].highScore, {
             fontFamily: 'monospace',
             fontSize: 20,
             fontStyle: 'bold',
@@ -53,7 +35,7 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
-        this.title2 = this.add.text(this.game.config.width * 0.5, 230, '2. ' + allData[1].name + ' - ' + allData[1].highScore, {
+        this.title2 = this.add.text(this.game.config.width * 0.5, 245, '2. ' + allData[1].name + ' - ' + allData[1].highScore, {
             fontFamily: 'monospace',
             fontSize: 20,
             fontStyle: 'bold',
@@ -62,7 +44,7 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title2.setOrigin(0.5);
 
-        this.title3 = this.add.text(this.game.config.width * 0.5, 245, '3. ' + allData[2].name + ' - ' + allData[2].highScore, {
+        this.title3 = this.add.text(this.game.config.width * 0.5, 260, '3. ' + allData[2].name + ' - ' + allData[2].highScore, {
             fontFamily: 'monospace',
             fontSize: 20,
             fontStyle: 'bold',
@@ -71,7 +53,7 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title3.setOrigin(0.5);
 
-        this.title4 = this.add.text(this.game.config.width * 0.5, 260, '4. ' + allData[3].name + ' - ' + allData[3].highScore, {
+        this.title4 = this.add.text(this.game.config.width * 0.5, 275, '4. ' + allData[3].name + ' - ' + allData[3].highScore, {
             fontFamily: 'monospace',
             fontSize: 20,
             fontStyle: 'bold',
@@ -80,7 +62,7 @@ class SceneGameOver extends Phaser.Scene {
         });
         this.title4.setOrigin(0.5);
 
-        this.title5 = this.add.text(this.game.config.width * 0.5, 275, '5. ' + allData[4].name + ' - ' + allData[4].highScore, {
+        this.title5 = this.add.text(this.game.config.width * 0.5, 290, '5. ' + allData[4].name + ' - ' + allData[4].highScore, {
             fontFamily: 'monospace',
             fontSize: 20,
             fontStyle: 'bold',
@@ -90,7 +72,7 @@ class SceneGameOver extends Phaser.Scene {
         this.title5.setOrigin(0.5);
         
 
-        this.finalScore = this.add.text(this.game.config.width * 0.5, 170, "YOUR SCORE:" + score);
+        this.finalScore = this.add.text(this.game.config.width * 0.5, 350, "YOUR SCORE:" + score);
         this.finalScore.setOrigin(0.5);
 
         this.sfx = {
@@ -101,7 +83,7 @@ class SceneGameOver extends Phaser.Scene {
         //Create restart button
         this.btnPlay = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.5,
+            this.game.config.height * 0.7,
             "sprBtn"
         );
         this.btnPlay.setInteractive();
@@ -120,7 +102,7 @@ class SceneGameOver extends Phaser.Scene {
             this.btnPlay.setTexture("sprBtn");
             this.scene.start("SceneMain");
         }, this);
-        this.title = this.add.text(this.game.config.width * 0.5, 320, "RESTART", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "RESTART", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
@@ -132,7 +114,7 @@ class SceneGameOver extends Phaser.Scene {
         //Create menu button
         this.btnMenu = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.6,
+            this.game.config.height * 0.8,
             "sprBtn"
         );
         this.btnMenu.setInteractive();
@@ -151,7 +133,7 @@ class SceneGameOver extends Phaser.Scene {
             this.btnMenu.setTexture("sprBtn");
             this.scene.start("SceneMainMenu");
         }, this);
-        this.title = this.add.text(this.game.config.width * 0.5, 384, "MENU", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.8, "MENU", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',

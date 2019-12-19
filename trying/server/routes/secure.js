@@ -11,7 +11,7 @@ router.post('/submit-score', asyncMiddleware(async (req, res, next) => {
 }));
 
 router.get('/scores', asyncMiddleware(async (req, res, next) => {
-  const users = await UserModel.find({}, 'email name highScore -_id').sort({ highScore: -1 }).limit(10);
+  const users = await UserModel.find({}, 'email name highScore -_id').sort({ highScore: -1 }).limit(20);
   res.status(200).json(users);
 }));
 

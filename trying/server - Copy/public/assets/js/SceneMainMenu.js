@@ -81,8 +81,9 @@ class SceneMainMenu extends Phaser.Scene {
 
     }
 
+
     create() {
-        // console.log(req.body);
+        //button sounds
         this.sfx = {
             btnOver: this.sound.add("sndBtnOver"),
             btnDown: this.sound.add("sndBtnDown")
@@ -91,7 +92,7 @@ class SceneMainMenu extends Phaser.Scene {
         //Create Play button
         this.btnPlay = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.5,
+            this.game.config.height * 0.7,
             "sprBtn"
         );
         this.btnPlay.setInteractive();
@@ -111,7 +112,7 @@ class SceneMainMenu extends Phaser.Scene {
             this.scene.start("SceneMain");
         }, this);
 
-        this.title = this.add.text(this.game.config.width * 0.5, 320, "PLAY", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.7, "PLAY", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
@@ -123,7 +124,7 @@ class SceneMainMenu extends Phaser.Scene {
         //Create Story button
         this.btnStory = this.add.sprite(
             this.game.config.width * 0.5,
-            this.game.config.height * 0.6,
+            this.game.config.height * 0.8,
             "sprBtn"
         );
         this.btnStory.setInteractive();
@@ -142,7 +143,7 @@ class SceneMainMenu extends Phaser.Scene {
             this.btnStory.setTexture("sprBtn");
             this.scene.start("SceneStory");
         }, this);
-        this.title = this.add.text(this.game.config.width * 0.5, 384, "STORY", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.8, "STORY", {
             fontFamily: 'monospace',
             fontSize: 32,
             fontStyle: 'bold',
@@ -152,7 +153,7 @@ class SceneMainMenu extends Phaser.Scene {
         this.title.setOrigin(0.5);
 
         //Create game title
-        this.title = this.add.text(this.game.config.width * 0.5, 128, "AVARUUSAMPUJA", {
+        this.title = this.add.text(this.game.config.width * 0.5, this.game.config.height * 0.2, "BLARGON 7", {
             fontFamily: 'monospace',
             fontSize: 45,
             fontStyle: 'bold',
@@ -161,15 +162,113 @@ class SceneMainMenu extends Phaser.Scene {
         });
         this.title.setOrigin(0.5);
 
+        //Create playership
+        this.playerShip = this.add.image(this.game.config.width * 0.5, this.game.config.height * 0.45, "playerShipMenu");
+        this.playerShip.setScale(1, 1)
+
         //Create backgrounds
         this.backgrounds = [];
-        for (var i = 0; i < 3; i++) {
-            var keys = ["nebulaMainMenuBg", "stars1Bg", "stars2Bg"];
+        for (var i = 0; i <= 1; i++) {
+            var keys = ["nebulaMainMenuBg", "stars1Bg"];
             var key = keys[i];
-            var bg = new ScrollingBackground(this, key, i + 2 * 15);
+            var bg = new ScrollingBackground(this, key, Phaser.Math.Between(50, 100));
             this.backgrounds.push(bg);
         }
     }
+
+
+
+
+
+    // create() {
+    //     // console.log(req.body);
+    //     this.sfx = {
+    //         btnOver: this.sound.add("sndBtnOver"),
+    //         btnDown: this.sound.add("sndBtnDown")
+    //     };
+
+    //     //Create Play button
+    //     this.btnPlay = this.add.sprite(
+    //         this.game.config.width * 0.5,
+    //         this.game.config.height * 0.5,
+    //         "sprBtn"
+    //     );
+    //     this.btnPlay.setInteractive();
+    //     this.btnPlay.on("pointerover", function () {
+    //         this.btnPlay.setTexture("sprBtnHover"); // set the button texture to sprBtnPlayHover
+    //         this.sfx.btnOver.play(); // play the button over sound
+    //     }, this);
+    //     this.btnPlay.on("pointerout", function () {
+    //         this.setTexture("sprBtn");
+    //     });
+    //     this.btnPlay.on("pointerdown", function () {
+    //         this.btnPlay.setTexture("sprBtnPressed");
+    //         this.sfx.btnDown.play();
+    //     }, this);
+    //     this.btnPlay.on("pointerup", function () {
+    //         this.btnPlay.setTexture("sprBtn");
+    //         this.scene.start("SceneMain");
+    //     }, this);
+
+    //     this.title = this.add.text(this.game.config.width * 0.5, 320, "PLAY", {
+    //         fontFamily: 'monospace',
+    //         fontSize: 32,
+    //         fontStyle: 'bold',
+    //         color: '#FFFFFF',
+    //         align: 'center'
+    //     });
+    //     this.title.setOrigin(0.5);
+
+    //     //Create Story button
+    //     this.btnStory = this.add.sprite(
+    //         this.game.config.width * 0.5,
+    //         this.game.config.height * 0.6,
+    //         "sprBtn"
+    //     );
+    //     this.btnStory.setInteractive();
+    //     this.btnStory.on("pointerover", function () {
+    //         this.btnStory.setTexture("sprBtnHover");
+    //         this.sfx.btnOver.play();
+    //     }, this);
+    //     this.btnStory.on("pointerout", function () {
+    //         this.setTexture("sprBtn");
+    //     });
+    //     this.btnStory.on("pointerdown", function () {
+    //         this.btnStory.setTexture("sprBtnPressed");
+    //         this.sfx.btnDown.play();
+    //     }, this);
+    //     this.btnStory.on("pointerup", function () {
+    //         this.btnStory.setTexture("sprBtn");
+    //         this.scene.start("SceneStory");
+    //     }, this);
+    //     this.title = this.add.text(this.game.config.width * 0.5, 384, "STORY", {
+    //         fontFamily: 'monospace',
+    //         fontSize: 32,
+    //         fontStyle: 'bold',
+    //         color: '#FFFFFF',
+    //         align: 'center'
+    //     });
+    //     this.title.setOrigin(0.5);
+
+    //     //Create game title
+    //     this.title = this.add.text(this.game.config.width * 0.5, 128, "AVARUUSAMPUJA", {
+    //         fontFamily: 'monospace',
+    //         fontSize: 45,
+    //         fontStyle: 'bold',
+    //         color: '#ffffff',
+    //         align: 'center'
+    //     });
+    //     this.title.setOrigin(0.5);
+
+    //     //Create backgrounds
+    //     this.backgrounds = [];
+    //     for (var i = 0; i < 3; i++) {
+    //         var keys = ["nebulaMainMenuBg", "stars1Bg", "stars2Bg"];
+    //         var key = keys[i];
+    //         var bg = new ScrollingBackground(this, key, i + 2 * 15);
+    //         this.backgrounds.push(bg);
+    //     }
+    // }
 
     update() {
         for (var i = 0; i < this.backgrounds.length; i++) {
