@@ -5,11 +5,11 @@ class SceneMainMenu extends Phaser.Scene {
 
     preload() {
         //load joystick plugin if not already loaded
-        if (!this.plugins.plugins[0]) {
-            var key = 'rexvirtualjoystickplugin';
-            var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/plugins/dist/rexvirtualjoystickplugin.min.js';
-            this.load.plugin(key, url, true);
-        }
+        // if (!this.plugins.plugins[0]) {
+        //     var key = 'rexvirtualjoystickplugin';
+        //     var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/plugins/dist/rexvirtualjoystickplugin.min.js';
+        //     this.load.plugin(key, url, true);
+        // }
 
         //backgrounds
         this.load.image("starsBg", "assets/content/backgrounds/stars.png");
