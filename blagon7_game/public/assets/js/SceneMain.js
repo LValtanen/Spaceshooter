@@ -181,7 +181,7 @@ class SceneMain extends Phaser.Scene {
                 }
                 else if (enemy.getData("type") == "EnergyBall") {
                     enemyType = "   Energy Ball";
-                    score += 30;
+                    score += 40;
                     scorePlus = enemyType + "   +40";
                     scoreText.text = scoreStr + score + scorePlus;
                 }
